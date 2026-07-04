@@ -221,8 +221,8 @@ p{ text-wrap:pretty; }
 /* ============================================================
    HERO
    ============================================================ */
-.hero{ padding-top:clamp(3rem,2rem+4vw,5.5rem); padding-bottom:clamp(3rem,2rem+4vw,5rem); }
-.hero__grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:center; }
+.hero{ padding-top:clamp(3rem,2rem + 4vw,5.5rem); padding-bottom:clamp(3rem,2rem + 4vw,5rem); }
+.hero__grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:center; }
 .hero__title{ margin-top:var(--s5); font-size:var(--fs-display); }
 .hero__title em{ font-style:italic; color:var(--accent); }
 .hero__lead{ margin-top:var(--s5); font-size:var(--fs-body-lg); color:var(--ink-70); max-width:40ch; }
@@ -284,7 +284,7 @@ p{ text-wrap:pretty; }
 /* ============================================================
    PAIN
    ============================================================ */
-.pain__head{ display:grid; grid-template-columns:1.3fr 0.7fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:center; }
+.pain__head{ display:grid; grid-template-columns:1.3fr 0.7fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:center; }
 .ratio{ align-self:center; }
 .ratio__row{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--s2); }
 .ratio__row:not(:first-child){ margin-top:var(--s5); }
@@ -299,7 +299,7 @@ p{ text-wrap:pretty; }
 .pain-card{ padding:var(--s7) var(--s6) var(--s6) 0; border-right:1px solid var(--line); }
 .pain-card:last-child{ border-right:0; padding-right:0; }
 .pain-card:not(:first-child){ padding-left:var(--s6); }
-.pain-card__fig{ font-family:var(--serif); font-weight:500; font-size:clamp(3rem,2rem+4vw,4.75rem); line-height:.9; letter-spacing:-0.03em; color:var(--accent); }
+.pain-card__fig{ font-family:var(--serif); font-weight:500; font-size:clamp(3rem,2rem + 4vw,4.75rem); line-height:.9; letter-spacing:-0.03em; color:var(--accent); }
 .pain-card__sub{ margin-top:var(--s4); font-size:var(--fs-h4); font-weight:600; letter-spacing:-0.01em; }
 .pain-card__body{ margin-top:var(--s3); font-size:var(--fs-sm); color:var(--ink-70); }
 
@@ -307,12 +307,12 @@ p{ text-wrap:pretty; }
    NICHES — editorial rail + panel
    ============================================================ */
 /* section header — heading left, intro right (fills top-right) */
-.niches__head{ display:grid; grid-template-columns:1.25fr 0.75fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:end; }
+.niches__head{ display:grid; grid-template-columns:1.25fr 0.75fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:end; }
 .niches__intro p{ color:var(--ink-70); font-size:var(--fs-body-lg); max-width:46ch; }
 .niches__count{ display:inline-flex; align-items:baseline; gap:var(--s3); margin-top:var(--s4); font-family:var(--mono); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-50); }
 .niches__count b{ font-family:var(--serif); font-size:1.5rem; font-weight:500; color:var(--accent); letter-spacing:-0.01em; }
 
-.niches__layout{ margin-top:var(--s7); display:grid; grid-template-columns:minmax(230px,290px) 1fr; gap:clamp(3rem,2rem+5vw,7.5rem); align-items:start; }
+.niches__layout{ margin-top:var(--s7); display:grid; grid-template-columns:minmax(230px,290px) 1fr; gap:clamp(3rem,2rem + 5vw,7.5rem); align-items:start; }
 
 /* vertical rail — capped height, scrolls, fades at bottom (JS syncs height) */
 .niches__rail{
@@ -365,7 +365,7 @@ p{ text-wrap:pretty; }
 }
 
 /* middle block — now a framed white card, matches the right one */
-.np__main{ min-width:0; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); padding:clamp(1.5rem,1rem+2vw,2.5rem); }
+.np__main{ min-width:0; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); padding:clamp(1.5rem,1rem + 2vw,2.5rem); }
 .niche-panel__title{ display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap; }
 .np__main h3{ margin-top:var(--s2); }
 .niche-panel__features{ margin-top:var(--s6); display:grid; gap:var(--s5); }
@@ -374,7 +374,7 @@ p{ text-wrap:pretty; }
 .niche-panel__cta{ margin-top:auto; padding-top:var(--s7); }
 
 /* right column — framed pull-quote card, matches middle block */
-.np__aside{ position:relative; display:flex; flex-direction:column; padding:clamp(1.5rem,1rem+2vw,2.5rem); background:var(--paper-2); border:1px solid var(--line-2); border-radius:var(--radius-l); }
+.np__aside{ position:relative; display:flex; flex-direction:column; padding:clamp(1.5rem,1rem + 2vw,2.5rem); background:var(--paper-2); border:1px solid var(--line-2); border-radius:var(--radius-l); }
 .np__aside .niche-panel__pain{ margin-top:auto; }
 .niche-panel__icon{ width:38px; height:38px; color:var(--accent); }
 .np__aside-label{ display:block; margin-top:var(--s5); font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
@@ -396,9 +396,9 @@ p{ text-wrap:pretty; }
 /* ============================================================
    PRICING — calculator as a refined instrument
    ============================================================ */
-.pricing__layout{ margin-top:var(--s8); display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:start; }
+.pricing__layout{ margin-top:var(--s8); display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:start; }
 .pricing__aside .kicker{ margin-bottom:var(--s4); }
-.pricing__aside h2{ font-size:clamp(2.25rem,1.4rem+3.4vw,3.5rem); max-width:16ch; }
+.pricing__aside h2{ font-size:clamp(2.25rem,1.4rem + 3.4vw,3.5rem); max-width:16ch; }
 .advantages{ margin-top:var(--s8); display:grid; gap:var(--s8); padding-left:var(--s6); border-left:2px solid var(--line-2); }
 .advantages li{ position:relative; display:flex; gap:var(--s5); }
 .advantages__num{ font-family:var(--mono); font-size:var(--fs-body); font-weight:500; color:var(--accent); line-height:1.35; flex-shrink:0; }
@@ -450,7 +450,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 .calc__out{ padding:var(--s7); background:var(--paper-2); }
 .calc__price-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s4); }
 .calc__price-label{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
-.calc__price-value{ font-family:var(--serif); font-weight:500; font-size:clamp(2.5rem,1.8rem+3vw,3.5rem); letter-spacing:-0.02em; line-height:1; }
+.calc__price-value{ font-family:var(--serif); font-weight:500; font-size:clamp(2.5rem,1.8rem + 3vw,3.5rem); letter-spacing:-0.02em; line-height:1; }
 .calc__price-period{ font-family:var(--sans); font-size:1rem; color:var(--ink-70); font-weight:400; }
 .calc__note{ font-size:var(--fs-xs); color:var(--ink-50); margin-top:var(--s3); min-height:1.2em; }
 .calc__platform-note{ font-size:var(--fs-xs); color:var(--ink-50); margin-top:var(--s3); }
