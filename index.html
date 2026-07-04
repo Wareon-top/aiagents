@@ -284,8 +284,8 @@ p{ text-wrap:pretty; }
 /* ============================================================
    PAIN
    ============================================================ */
-.pain__head{ display:grid; grid-template-columns:1.35fr 0.65fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:end; }
-.ratio{ align-self:end; padding-bottom:var(--s2); }
+.pain__head{ display:grid; grid-template-columns:1.3fr 0.7fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:center; }
+.ratio{ align-self:center; }
 .ratio__row{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--s2); }
 .ratio__row:not(:first-child){ margin-top:var(--s5); }
 .ratio__k{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-50); }
@@ -295,7 +295,7 @@ p{ text-wrap:pretty; }
 .ratio__bar span{ display:block; height:100%; border-radius:999px; background:var(--accent); }
 .ratio__bar--ink span{ background:var(--ink); }
 .ratio__cap{ margin-top:var(--s5); font-size:var(--fs-xs); color:var(--ink-50); max-width:34ch; }
-.pain__grid{ margin-top:var(--s8); display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--line); }
+.pain__grid{ margin-top:var(--s6); display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--line); }
 .pain-card{ padding:var(--s7) var(--s6) var(--s6) 0; border-right:1px solid var(--line); }
 .pain-card:last-child{ border-right:0; padding-right:0; }
 .pain-card:not(:first-child){ padding-left:var(--s6); }
@@ -306,13 +306,26 @@ p{ text-wrap:pretty; }
 /* ============================================================
    NICHES — editorial rail + panel
    ============================================================ */
-.niches__layout{ margin-top:var(--s8); display:grid; grid-template-columns:minmax(220px,280px) 1fr; gap:clamp(2.5rem,1.5rem+5vw,6.5rem); align-items:start; }
+/* section header — heading left, intro right (fills top-right) */
+.niches__head{ display:grid; grid-template-columns:1.25fr 0.75fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:end; }
+.niches__intro p{ color:var(--ink-70); font-size:var(--fs-body-lg); max-width:46ch; }
+.niches__count{ display:inline-flex; align-items:baseline; gap:var(--s3); margin-top:var(--s4); font-family:var(--mono); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-50); }
+.niches__count b{ font-family:var(--serif); font-size:1.5rem; font-weight:500; color:var(--accent); letter-spacing:-0.01em; }
 
-/* desktop vertical rail */
-.niches__rail{ display:flex; flex-direction:column; border-top:1px solid var(--line); }
+.niches__layout{ margin-top:var(--s7); display:grid; grid-template-columns:minmax(230px,290px) 1fr; gap:clamp(3rem,2rem+5vw,7.5rem); align-items:start; }
+
+/* vertical rail — capped height, scrolls, fades at bottom (JS syncs height) */
+.niches__rail{
+  display:flex; flex-direction:column; border-top:1px solid var(--line);
+  overflow-y:auto; overscroll-behavior:contain;
+  scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(to bottom,#000 82%,transparent);
+  mask-image:linear-gradient(to bottom,#000 82%,transparent);
+}
+.niches__rail::-webkit-scrollbar{ display:none; }
 .niche-tab{
-  position:relative; text-align:left; width:100%; overflow:hidden; isolation:isolate;
-  padding:var(--s4) var(--s5) var(--s4) var(--s4);
+  position:relative; flex:none; text-align:left; width:100%; overflow:hidden; isolation:isolate;
+  padding:var(--s5) var(--s5) var(--s5) var(--s4);
   border-bottom:1px solid var(--line);
   font-size:var(--fs-body); font-weight:500; color:var(--ink-70);
   display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
@@ -330,7 +343,7 @@ p{ text-wrap:pretty; }
 .niches__panels{ display:grid; }
 .niche-panel{
   grid-area:1 / 1;
-  display:grid; grid-template-columns:1fr 0.82fr; gap:clamp(1.5rem,1rem+3vw,4rem); align-items:start;
+  display:grid; grid-template-columns:1.05fr 0.95fr; gap:var(--s5); align-items:stretch;
   opacity:0; visibility:hidden; transform:translateY(10px);
   transition:opacity var(--t2) var(--ease), transform var(--t2) var(--ease), visibility 0s linear var(--t2);
   pointer-events:none;
@@ -351,16 +364,18 @@ p{ text-wrap:pretty; }
   .niche-panel.is-active .np__main > *, .niche-panel.is-active .np__aside{ animation:none; }
 }
 
-.np__main{ min-width:0; }
+/* middle block — now a framed white card, matches the right one */
+.np__main{ min-width:0; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); padding:clamp(1.5rem,1rem+2vw,2.5rem); }
 .niche-panel__title{ display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap; }
 .np__main h3{ margin-top:var(--s2); }
-.niche-panel__features{ margin-top:var(--s6); display:grid; gap:var(--s5); max-width:46ch; }
+.niche-panel__features{ margin-top:var(--s6); display:grid; gap:var(--s5); }
 .niche-panel__features li{ display:flex; align-items:flex-start; gap:var(--s4); font-size:var(--fs-body); }
 .niche-panel__features .tick{ flex-shrink:0; width:20px; height:20px; margin-top:3px; color:var(--accent); }
-.niche-panel__cta{ margin-top:var(--s7); }
+.niche-panel__cta{ margin-top:auto; padding-top:var(--s7); }
 
-/* right column — icon + big pull-quote pain */
-.np__aside{ position:relative; padding:var(--s6); background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius-l); }
+/* right column — framed pull-quote card, matches middle block */
+.np__aside{ position:relative; display:flex; flex-direction:column; padding:clamp(1.5rem,1rem+2vw,2.5rem); background:var(--paper-2); border:1px solid var(--line-2); border-radius:var(--radius-l); }
+.np__aside .niche-panel__pain{ margin-top:auto; }
 .niche-panel__icon{ width:38px; height:38px; color:var(--accent); }
 .np__aside-label{ display:block; margin-top:var(--s5); font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
 .niche-panel__pain{
@@ -381,14 +396,15 @@ p{ text-wrap:pretty; }
 /* ============================================================
    PRICING — calculator as a refined instrument
    ============================================================ */
-.pricing__layout{ margin-top:var(--s8); display:grid; grid-template-columns:0.85fr 1.15fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:start; }
+.pricing__layout{ margin-top:var(--s8); display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:start; }
 .pricing__aside .kicker{ margin-bottom:var(--s4); }
-.advantages{ margin-top:var(--s8); display:grid; gap:var(--s7); padding-left:var(--s6); border-left:1px solid var(--line-2); }
-.advantages li{ position:relative; display:flex; gap:var(--s4); }
-.advantages__num{ font-family:var(--mono); font-size:var(--fs-sm); font-weight:500; color:var(--accent); line-height:1.4; flex-shrink:0; }
-.advantages__num::before{ content:""; position:absolute; left:calc(-1 * var(--s6) - 1px); top:.15em; width:1px; height:1.3em; background:var(--accent); }
-.advantages__body{ font-size:var(--fs-sm); color:var(--ink-70); line-height:1.55; }
-.advantages__body b{ display:block; color:var(--ink); font-weight:600; font-size:var(--fs-body); margin-bottom:var(--s1); }
+.pricing__aside h2{ font-size:clamp(2.25rem,1.4rem+3.4vw,3.5rem); max-width:16ch; }
+.advantages{ margin-top:var(--s8); display:grid; gap:var(--s8); padding-left:var(--s6); border-left:2px solid var(--line-2); }
+.advantages li{ position:relative; display:flex; gap:var(--s5); }
+.advantages__num{ font-family:var(--mono); font-size:var(--fs-body); font-weight:500; color:var(--accent); line-height:1.35; flex-shrink:0; }
+.advantages__num::before{ content:""; position:absolute; left:calc(-1 * var(--s6) - 2px); top:0; width:2px; height:1.5em; background:var(--accent); }
+.advantages__body{ font-size:var(--fs-body-lg); font-weight:500; color:var(--ink-70); line-height:1.5; }
+.advantages__body b{ display:block; color:var(--ink); font-weight:700; font-size:var(--fs-h4); letter-spacing:-0.01em; margin-bottom:var(--s2); }
 
 .calc{ background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); overflow:hidden; box-shadow:0 30px 60px -45px rgba(40,32,20,.4); }
 .calc__step{ padding:var(--s7); border-bottom:1px solid var(--line); }
@@ -499,7 +515,8 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
   .niches__layout{ grid-template-columns:1fr; }
   .niche-panel{ grid-template-columns:1fr; gap:var(--s5); }
   /* rail becomes horizontal scroll on mobile */
-  .niches__rail{ flex-direction:row; overflow-x:auto; border-top:0; border-bottom:1px solid var(--line); scrollbar-width:none; margin-bottom:var(--s6); }
+  .niches__head{ grid-template-columns:1fr; gap:var(--s5); }
+  .niches__rail{ flex-direction:row; overflow-x:auto; overflow-y:visible; max-height:none !important; border-top:0; border-bottom:1px solid var(--line); scrollbar-width:none; margin-bottom:var(--s6); -webkit-mask-image:none; mask-image:none; }
   .niches__rail::-webkit-scrollbar{ display:none; }
   .niche-tab{ flex-shrink:0; width:auto; border-bottom:0; border-right:1px solid var(--line); padding:var(--s3) var(--s5); }
   .niche-tab::before{ top:auto; bottom:0; left:0; right:0; width:auto; height:2px; transform:scaleX(0); }
@@ -647,10 +664,15 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 
   <!-- ============ NICHES ============ -->
   <section class="niches section container" id="niches">
-    <div class="sec-head reveal">
-      <span class="kicker">Специализации</span>
-      <h2>Один продукт. <span class="serif-i accent">Восемь ниш.</span></h2>
-      <p>Wareon подстраивает поиск, сигналы и текст оффера под то, что продаёшь именно ты.</p>
+    <div class="niches__head reveal">
+      <div class="sec-head">
+        <span class="kicker">Специализации</span>
+        <h2>Один продукт. <span class="serif-i accent">Восемь ниш.</span></h2>
+      </div>
+      <div class="niches__intro">
+        <p>Wareon подстраивает поиск, сигналы и текст оффера под то, что продаёшь именно ты.</p>
+        <span class="niches__count"><b>08</b> специализаций · один аккаунт</span>
+      </div>
     </div>
 
     <div class="niches__layout">
@@ -1005,6 +1027,12 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
   if (tablist) {
     const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
     const panels = Array.from(document.querySelectorAll('.niche-panel'));
+    const panelsWrap = document.querySelector('.niches__panels');
+    const syncRailHeight = () => {
+      if (!panelsWrap) return;
+      if (window.matchMedia('(max-width:900px)').matches) { tablist.style.maxHeight = ''; return; }
+      tablist.style.maxHeight = panelsWrap.offsetHeight + 'px';
+    };
     const activate = (tab, setFocus) => {
       if (!tab || tab.getAttribute('aria-selected') === 'true') return;
       tabs.forEach((t) => {
@@ -1021,6 +1049,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       });
       if (setFocus) tab.focus();
       tab.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
+      requestAnimationFrame(syncRailHeight);
     };
     tablist.addEventListener('click', (e) => { const t = e.target.closest('[role="tab"]'); if (t) activate(t, false); });
     tablist.addEventListener('keydown', (e) => {
@@ -1036,6 +1065,10 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       }
       e.preventDefault(); activate(next, true);
     });
+    // keep the rail the same height as the panels; extra niches scroll into view
+    window.addEventListener('load', syncRailHeight);
+    window.addEventListener('resize', syncRailHeight);
+    setTimeout(syncRailHeight, 300);
   }
 
   /* ---- 3. Auth modal ---- */
