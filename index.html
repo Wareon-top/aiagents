@@ -29,20 +29,25 @@
    ============================================================ */
 
 :root{
-  /* --- warm paper palette --- */
-  --paper:      #FBF9F4;
-  --paper-2:    #F4EFE4;   /* nested fills */
-  --paper-3:    #ECE5D6;   /* deeper */
-  --card:       #FFFDF9;
+  /* --- near-white, barely-milky palette --- */
+  --paper:      #FDFCFA;   /* almost white, a hint of warmth */
+  --paper-2:    #F5F2EB;   /* nested fills */
+  --paper-3:    #EBE6DB;   /* deeper */
+  --card:       #FFFFFF;
   --ink:        #1B1A16;   /* near-black, warm */
   --ink-70:     #514C43;   /* body-muted */
   --ink-50:     #857E71;   /* captions/meta — clearly lighter than ink-70 */
-  --line:       #E4DDCD;   /* hairline */
-  --line-2:     #D6CDB8;   /* stronger hairline */
+  --line:       #E7E1D4;   /* hairline */
+  --line-2:     #D8CFBD;   /* stronger hairline */
   --accent:     #B24A1E;   /* terracotta — used sparingly */
   --accent-2:   #8F3A16;   /* pressed / deep */
   --accent-tint:#F3E4D9;   /* faint accent wash */
   --on-accent:  #FCF6EF;
+
+  /* 3D button shadow colors */
+  --sh-dark:   #0C0C0A;
+  --sh-accent: #7A3113;
+  --sh-ghost:  #DAD3C6;
 
   /* --- type --- */
   --serif: 'Playfair Display', 'Times New Roman', Georgia, serif;
@@ -144,22 +149,25 @@ p{ text-wrap:pretty; }
 
 /* ---------- buttons (flat, refined) ---------- */
 .btn{
-  --btn-bg:var(--ink); --btn-fg:var(--paper);
+  --btn-bg:var(--ink); --btn-fg:var(--paper); --btn-sh:var(--sh-dark);
+  position:relative;
   display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
   padding:.85rem 1.5rem;
   font-family:var(--sans); font-weight:500; font-size:var(--fs-sm);
   color:var(--btn-fg); background:var(--btn-bg);
   border:1px solid var(--btn-bg);
   border-radius:var(--radius-s);
+  box-shadow:0 3px 0 var(--btn-sh);
   transition:background var(--t1) var(--ease), color var(--t1) var(--ease),
-             border-color var(--t1) var(--ease), transform var(--t1) var(--ease);
+             border-color var(--t1) var(--ease),
+             transform .12s var(--ease), box-shadow .12s var(--ease);
 }
-.btn:hover{ transform:translateY(-1px); }
-.btn:active{ transform:translateY(0); }
-.btn--accent{ --btn-bg:var(--accent); --btn-fg:var(--on-accent); }
+.btn:hover{ transform:translateY(-2px); box-shadow:0 5px 0 var(--btn-sh); }
+.btn:active{ transform:translateY(3px); box-shadow:0 0 0 var(--btn-sh); }
+.btn--accent{ --btn-bg:var(--accent); --btn-fg:var(--on-accent); --btn-sh:var(--sh-accent); }
 .btn--accent:hover{ --btn-bg:var(--accent-2); }
 .btn--ghost{
-  --btn-bg:transparent; --btn-fg:var(--ink);
+  --btn-bg:transparent; --btn-fg:var(--ink); --btn-sh:var(--sh-ghost);
   border-color:var(--line-2);
 }
 .btn--ghost:hover{ background:var(--paper-2); border-color:var(--ink); }
@@ -223,54 +231,70 @@ p{ text-wrap:pretty; }
 .hero__stat b{ font-family:var(--serif); font-weight:500; font-size:1.6rem; letter-spacing:-0.01em; display:block; line-height:1; }
 .hero__stat span{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-50); }
 
-/* hero visual: grid-seated lead preview */
+/* hero visual: three separate floating lead cards */
 .hero__visual{ position:relative; }
-.lead-preview{
-  position:relative; z-index:2;
+.hero__cards{ position:relative; margin-top:var(--s7); padding-inline:var(--s4); display:flex; flex-direction:column; gap:var(--s4); }
+.lead-card{
   background:var(--card); border:1px solid var(--line-2);
-  border-radius:var(--radius-l);
-  padding:var(--s5);
-  box-shadow:0 24px 60px -30px rgba(40,32,20,.28);
+  border-radius:var(--radius-m); padding:var(--s4) var(--s5);
+  box-shadow:0 22px 45px -30px rgba(40,32,20,.35);
+  animation:float 6.5s var(--ease) infinite;
 }
-.lead-preview__behind{
-  position:absolute; z-index:1; inset:auto 0 -18px 0; height:70px;
-  background:var(--card); border:1px solid var(--line);
-  border-radius:var(--radius-l); left:6%; right:6%;
-  opacity:.7;
-}
-.lp__top{ display:flex; align-items:center; justify-content:space-between; padding-bottom:var(--s4); border-bottom:1px solid var(--line); }
-.lp__tag{ font-family:var(--mono); font-size:var(--fs-label); letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-50); }
-.lp__live{ display:inline-flex; align-items:center; gap:.4rem; font-family:var(--mono); font-size:var(--fs-label); letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); }
-.lp__live::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); animation:pulse 2.4s var(--ease) infinite; }
-@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
-.lp__item{ display:flex; align-items:flex-start; gap:var(--s4); padding:var(--s4) 0; border-bottom:1px solid var(--line); }
-.lp__item:last-of-type{ border-bottom:0; }
-.lp__dot{ width:9px; height:9px; border-radius:50%; margin-top:6px; flex-shrink:0; }
-.lp__dot--hot{ background:var(--accent); }
-.lp__dot--warm{ background:#C8922E; }
-.lp__dot--cold{ background:var(--ink-50); }
-.lp__body{ flex:1; min-width:0; }
-.lp__name{ font-weight:600; font-size:var(--fs-sm); }
-.lp__name span{ font-family:var(--mono); font-size:var(--fs-label); color:var(--ink-50); text-transform:uppercase; letter-spacing:0.1em; margin-left:.5rem; }
-.lp__signal{ font-size:var(--fs-xs); color:var(--ink-70); margin-top:2px; }
-.lp__signal b{ color:var(--ink); font-weight:600; }
-.lp__foot{ display:flex; align-items:center; justify-content:space-between; margin-top:var(--s4); padding-top:var(--s4); border-top:1px solid var(--line); }
-.lp__ready{ font-family:var(--mono); font-size:var(--fs-label); letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-50); }
-.lp__send{ font-size:var(--fs-xs); font-weight:600; color:var(--on-accent); background:var(--ink); padding:.45rem .9rem; border-radius:var(--radius-s); }
+.lead-card--1{ transform:rotate(-2.5deg); margin-right:var(--s7); animation-delay:0s; z-index:1; }
+.lead-card--2{ transform:rotate(1.8deg);  margin-left:var(--s7);  animation-delay:1.1s; z-index:3; box-shadow:0 26px 55px -30px rgba(40,32,20,.4); }
+.lead-card--3{ transform:rotate(-1.4deg); margin-right:var(--s5); animation-delay:2.2s; z-index:2; }
+@keyframes float{ 0%,100%{ translate:0 0; } 50%{ translate:0 -12px; } }
+@media (prefers-reduced-motion:reduce){ .lead-card{ animation:none; } }
+.lc__top{ display:flex; align-items:center; gap:var(--s3); }
+.lc__dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.lc__dot--hot{ background:var(--accent); }
+.lc__dot--warm{ background:#C8922E; }
+.lc__dot--cold{ background:var(--ink-50); }
+.lc__name{ font-weight:600; font-size:var(--fs-sm); }
+.lc__tag{ margin-left:auto; font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-50); }
+.lc__signal{ font-size:var(--fs-xs); color:var(--ink-70); margin-top:var(--s3); }
+.lc__signal b{ color:var(--ink); font-weight:600; }
+.lc__foot{ display:flex; align-items:center; justify-content:space-between; margin-top:var(--s4); padding-top:var(--s3); border-top:1px solid var(--line); }
+.lc__ready{ font-family:var(--mono); font-size:var(--fs-label); letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-50); }
+.lc__send{ font-size:var(--fs-xs); font-weight:600; color:var(--on-accent); background:var(--ink); padding:.4rem .85rem; border-radius:var(--radius-s); }
 
 /* ============================================================
    INDEX STRIP (niches as editorial index, not pills)
    ============================================================ */
-.index-strip{ border-block:1px solid var(--line); }
-.index-strip__inner{ display:flex; align-items:center; gap:var(--s5); padding-block:var(--s4); flex-wrap:wrap; }
-.index-strip__label{ font-family:var(--mono); font-size:var(--fs-label); letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-50); white-space:nowrap; }
-.index-strip__list{ display:flex; flex-wrap:wrap; gap:var(--s3) var(--s5); }
-.index-strip__list span{ position:relative; font-size:var(--fs-sm); color:var(--ink-70); }
-.index-strip__list span:not(:last-child)::after{ content:"·"; position:absolute; right:calc(-1 * var(--s5) / 2 - 2px); color:var(--line-2); }
+.index-strip{ border-block:1px solid var(--line); background:var(--paper-2); overflow:hidden; }
+.index-strip__inner{ display:flex; align-items:stretch; }
+.index-strip__label{
+  display:flex; align-items:center; flex-shrink:0;
+  padding:var(--s4) var(--s5); padding-left:var(--pad);
+  font-family:var(--mono); font-size:var(--fs-label); letter-spacing:0.16em;
+  text-transform:uppercase; color:var(--ink-50);
+  background:var(--paper); border-right:1px solid var(--line); white-space:nowrap;
+}
+.marquee{ position:relative; flex:1; overflow:hidden; display:flex; align-items:center;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent); }
+.marquee__track{ display:flex; align-items:center; gap:var(--s6); width:max-content; padding-left:var(--s6); animation:marquee 34s linear infinite; }
+.marquee:hover .marquee__track{ animation-play-state:paused; }
+.marquee__item{ position:relative; display:inline-flex; align-items:center; font-size:1.0625rem; font-weight:500; color:var(--ink-70); white-space:nowrap; transition:color var(--t1) var(--ease); }
+.marquee__item:hover{ color:var(--accent); }
+.marquee__item::after{ content:"◆"; margin-left:var(--s6); font-size:.5rem; color:var(--accent); opacity:.5; transform:translateY(-1px); }
+@keyframes marquee{ to{ transform:translateX(-50%); } }
+@media (prefers-reduced-motion:reduce){ .marquee__track{ animation:none; } }
 
 /* ============================================================
    PAIN
    ============================================================ */
+.pain__head{ display:grid; grid-template-columns:1.35fr 0.65fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:end; }
+.ratio{ align-self:end; padding-bottom:var(--s2); }
+.ratio__row{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--s2); }
+.ratio__row:not(:first-child){ margin-top:var(--s5); }
+.ratio__k{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-50); }
+.ratio__v{ font-family:var(--serif); font-size:1.75rem; font-weight:500; letter-spacing:-0.01em; color:var(--accent); line-height:1; }
+.ratio__v--ink{ color:var(--ink); }
+.ratio__bar{ height:8px; border-radius:999px; background:var(--paper-3); overflow:hidden; }
+.ratio__bar span{ display:block; height:100%; border-radius:999px; background:var(--accent); }
+.ratio__bar--ink span{ background:var(--ink); }
+.ratio__cap{ margin-top:var(--s5); font-size:var(--fs-xs); color:var(--ink-50); max-width:34ch; }
 .pain__grid{ margin-top:var(--s8); display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--line); }
 .pain-card{ padding:var(--s7) var(--s6) var(--s6) 0; border-right:1px solid var(--line); }
 .pain-card:last-child{ border-right:0; padding-right:0; }
@@ -282,44 +306,67 @@ p{ text-wrap:pretty; }
 /* ============================================================
    NICHES — editorial rail + panel
    ============================================================ */
-.niches__layout{ margin-top:var(--s8); display:grid; grid-template-columns:minmax(210px,260px) 1fr; gap:clamp(1.5rem,1rem+3vw,4rem); align-items:start; }
+.niches__layout{ margin-top:var(--s8); display:grid; grid-template-columns:minmax(220px,280px) 1fr; gap:clamp(2.5rem,1.5rem+5vw,6.5rem); align-items:start; }
 
 /* desktop vertical rail */
 .niches__rail{ display:flex; flex-direction:column; border-top:1px solid var(--line); }
 .niche-tab{
-  position:relative; text-align:left; width:100%;
+  position:relative; text-align:left; width:100%; overflow:hidden; isolation:isolate;
   padding:var(--s4) var(--s5) var(--s4) var(--s4);
   border-bottom:1px solid var(--line);
   font-size:var(--fs-body); font-weight:500; color:var(--ink-70);
   display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
-  transition:color var(--t1) var(--ease), padding-left var(--t2) var(--ease), background var(--t1) var(--ease);
+  transition:color var(--t2) var(--ease), padding-left var(--t2) var(--ease);
 }
-.niche-tab::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--accent); transform:scaleY(0); transition:transform var(--t2) var(--ease); }
-.niche-tab .idx{ font-family:var(--mono); font-size:var(--fs-label); color:var(--ink-50); letter-spacing:0.05em; }
+.niche-tab::after{ content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg,var(--paper-2),transparent 85%); transform:translateX(-101%); transition:transform var(--t2) var(--ease); }
+.niche-tab.is-active::after{ transform:translateX(0); }
+.niche-tab::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--accent); transform:scaleY(0); transform-origin:top; transition:transform var(--t2) var(--ease); }
+.niche-tab .idx{ font-family:var(--mono); font-size:var(--fs-label); color:var(--ink-50); letter-spacing:0.05em; transition:color var(--t2) var(--ease); }
 .niche-tab:hover{ color:var(--ink); padding-left:var(--s5); }
-.niche-tab.is-active{ color:var(--ink); }
+.niche-tab.is-active{ color:var(--ink); padding-left:var(--s5); }
 .niche-tab.is-active::before{ transform:scaleY(1); }
 .niche-tab.is-active .idx{ color:var(--accent); }
 
 .niches__panels{ display:grid; }
 .niche-panel{
   grid-area:1 / 1;
+  display:grid; grid-template-columns:1fr 0.82fr; gap:clamp(1.5rem,1rem+3vw,4rem); align-items:start;
   opacity:0; visibility:hidden; transform:translateY(10px);
   transition:opacity var(--t2) var(--ease), transform var(--t2) var(--ease), visibility 0s linear var(--t2);
   pointer-events:none;
 }
 .niche-panel.is-active{ opacity:1; visibility:visible; transform:none; transition-delay:0s; pointer-events:auto; }
-.niche-panel[hidden]{ display:block; }
-.niche-panel__icon{ width:34px; height:34px; color:var(--accent); margin-bottom:var(--s4); }
-.niche-panel__title{ display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap; }
-.niche-panel__pain{
-  margin-top:var(--s5); padding-left:var(--s5); border-left:2px solid var(--accent);
-  font-family:var(--serif); font-style:italic; font-size:var(--fs-h4); line-height:1.45; color:var(--ink-70); max-width:52ch;
+.niche-panel[hidden]{ display:grid; }
+
+/* switching animation — content slides in on activation */
+.niche-panel.is-active .np__main > *{ animation:npIn .55s var(--ease) both; }
+.niche-panel.is-active .np__main > *:nth-child(1){ animation-delay:.04s; }
+.niche-panel.is-active .np__main > *:nth-child(2){ animation-delay:.10s; }
+.niche-panel.is-active .np__main > *:nth-child(3){ animation-delay:.16s; }
+.niche-panel.is-active .np__main > *:nth-child(4){ animation-delay:.22s; }
+.niche-panel.is-active .np__aside{ animation:npInR .6s var(--ease) .08s both; }
+@keyframes npIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+@keyframes npInR{ from{ opacity:0; transform:translateX(18px); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion:reduce){
+  .niche-panel.is-active .np__main > *, .niche-panel.is-active .np__aside{ animation:none; }
 }
-.niche-panel__features{ margin-top:var(--s6); display:grid; gap:var(--s4); max-width:52ch; }
+
+.np__main{ min-width:0; }
+.niche-panel__title{ display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap; }
+.np__main h3{ margin-top:var(--s2); }
+.niche-panel__features{ margin-top:var(--s6); display:grid; gap:var(--s5); max-width:46ch; }
 .niche-panel__features li{ display:flex; align-items:flex-start; gap:var(--s4); font-size:var(--fs-body); }
 .niche-panel__features .tick{ flex-shrink:0; width:20px; height:20px; margin-top:3px; color:var(--accent); }
 .niche-panel__cta{ margin-top:var(--s7); }
+
+/* right column — icon + big pull-quote pain */
+.np__aside{ position:relative; padding:var(--s6); background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius-l); }
+.niche-panel__icon{ width:38px; height:38px; color:var(--accent); }
+.np__aside-label{ display:block; margin-top:var(--s5); font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
+.niche-panel__pain{
+  margin-top:var(--s3);
+  font-family:var(--serif); font-style:italic; font-size:var(--fs-h3); line-height:1.32; color:var(--ink); text-wrap:pretty;
+}
 
 /* ============================================================
    HOW
@@ -336,18 +383,21 @@ p{ text-wrap:pretty; }
    ============================================================ */
 .pricing__layout{ margin-top:var(--s8); display:grid; grid-template-columns:0.85fr 1.15fr; gap:clamp(2rem,1rem+4vw,5rem); align-items:start; }
 .pricing__aside .kicker{ margin-bottom:var(--s4); }
-.pricing__aside ul{ margin-top:var(--s6); display:grid; gap:var(--s4); }
-.pricing__aside li{ display:flex; gap:var(--s4); font-size:var(--fs-sm); color:var(--ink-70); }
-.pricing__aside li b{ color:var(--ink); font-weight:600; }
+.advantages{ margin-top:var(--s8); display:grid; gap:var(--s7); padding-left:var(--s6); border-left:1px solid var(--line-2); }
+.advantages li{ position:relative; display:flex; gap:var(--s4); }
+.advantages__num{ font-family:var(--mono); font-size:var(--fs-sm); font-weight:500; color:var(--accent); line-height:1.4; flex-shrink:0; }
+.advantages__num::before{ content:""; position:absolute; left:calc(-1 * var(--s6) - 1px); top:.15em; width:1px; height:1.3em; background:var(--accent); }
+.advantages__body{ font-size:var(--fs-sm); color:var(--ink-70); line-height:1.55; }
+.advantages__body b{ display:block; color:var(--ink); font-weight:600; font-size:var(--fs-body); margin-bottom:var(--s1); }
 
-.calc{ background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); overflow:hidden; }
-.calc__step{ padding:var(--s6); border-bottom:1px solid var(--line); }
-.calc__step-label{ display:flex; align-items:center; gap:var(--s3); font-family:var(--mono); font-size:var(--fs-label); font-weight:500; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-50); margin-bottom:var(--s4); }
+.calc{ background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); overflow:hidden; box-shadow:0 30px 60px -45px rgba(40,32,20,.4); }
+.calc__step{ padding:var(--s7); border-bottom:1px solid var(--line); }
+.calc__step-label{ display:flex; align-items:center; gap:var(--s3); font-family:var(--mono); font-size:var(--fs-label); font-weight:500; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-50); margin-bottom:var(--s5); }
 .calc__step-num{ display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; border:1px solid var(--line-2); color:var(--ink-70); font-size:.62rem; }
 
-.calc__pills{ display:flex; flex-wrap:wrap; gap:var(--s2); }
+.calc__pills{ display:flex; flex-wrap:wrap; gap:var(--s3); }
 .pill{
-  padding:.55rem 1rem; border-radius:var(--radius-s);
+  padding:.6rem 1.05rem; border-radius:var(--radius-s);
   border:1px solid var(--line-2); background:transparent;
   color:var(--ink-70); font-size:var(--fs-sm); font-weight:500;
   display:inline-flex; align-items:center; gap:.4rem;
@@ -370,7 +420,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 .calc__antiban{ margin-top:var(--s4); font-size:var(--fs-xs); color:var(--ink-70); background:var(--paper-2); border-radius:var(--radius-s); padding:.7rem .85rem; line-height:1.5; }
 .calc__antiban b{ color:var(--accent); font-weight:600; }
 
-.calc__periods{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s2); }
+.calc__periods{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s3); }
 .calc__period{
   padding:.7rem; border-radius:var(--radius-s); border:1px solid var(--line-2);
   background:transparent; color:var(--ink-70); font-size:var(--fs-sm); font-weight:500; text-align:center;
@@ -381,7 +431,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 .calc__period:hover{ border-color:var(--ink); color:var(--ink); }
 .calc__period.is-active{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
 
-.calc__out{ padding:var(--s6); background:var(--paper-2); }
+.calc__out{ padding:var(--s7); background:var(--paper-2); }
 .calc__price-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s4); }
 .calc__price-label{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
 .calc__price-value{ font-family:var(--serif); font-weight:500; font-size:clamp(2.5rem,1.8rem+3vw,3.5rem); letter-spacing:-0.02em; line-height:1; }
@@ -437,13 +487,17 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
    ============================================================ */
 @media (max-width:900px){
   .site-nav, .header__login{ display:none; }
-  .hero__grid{ grid-template-columns:1fr; gap:var(--s7); }
-  .hero__visual{ order:2; max-width:420px; }
+  .hero__grid{ grid-template-columns:1fr; gap:var(--s6); }
+  .hero__visual{ order:2; max-width:440px; }
+  .hero__cards{ margin-top:var(--s2); padding-inline:0; }
+  .pain__head{ grid-template-columns:1fr; gap:var(--s6); }
+  .ratio{ max-width:440px; }
   .pain__grid{ grid-template-columns:1fr; border-top:0; }
   .pain-card{ padding:var(--s5) 0; border-right:0; border-top:1px solid var(--line); }
   .pain-card:not(:first-child){ padding-left:0; }
   .pain-card:last-child{ padding-bottom:0; }
   .niches__layout{ grid-template-columns:1fr; }
+  .niche-panel{ grid-template-columns:1fr; gap:var(--s5); }
   /* rail becomes horizontal scroll on mobile */
   .niches__rail{ flex-direction:row; overflow-x:auto; border-top:0; border-bottom:1px solid var(--line); scrollbar-width:none; margin-bottom:var(--s6); }
   .niches__rail::-webkit-scrollbar{ display:none; }
@@ -522,58 +576,53 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       </div>
 
       <div class="hero__visual reveal" style="--d:.28s" aria-hidden="true">
-        <div class="lead-preview__behind"></div>
-        <article class="lead-preview">
-          <div class="lp__top">
-            <span class="lp__tag">Найденные лиды</span>
-            <span class="lp__live">Live</span>
-          </div>
-          <div class="lp__item">
-            <span class="lp__dot lp__dot--hot"></span>
-            <div class="lp__body">
-              <div class="lp__name">Селлер WB <span>Дизайн</span></div>
-              <p class="lp__signal">Инфографика карточек · конверсия <b>0.8%</b></p>
-            </div>
-          </div>
-          <div class="lp__item">
-            <span class="lp__dot lp__dot--warm"></span>
-            <div class="lp__body">
-              <div class="lp__name">Эксперт · 14k <span>Продюсинг</span></div>
-              <p class="lp__signal">Аудитория растёт · <b>нет запусков</b></p>
-            </div>
-          </div>
-          <div class="lp__item">
-            <span class="lp__dot lp__dot--cold"></span>
-            <div class="lp__body">
-              <div class="lp__name">Барбершоп <span>SMM</span></div>
-              <p class="lp__signal">Последний пост · <b>2 мес. назад</b></p>
-            </div>
-          </div>
-          <div class="lp__foot">
-            <span class="lp__ready">3 оффера готовы</span>
-            <span class="lp__send">Отправить →</span>
-          </div>
-        </article>
+        <div class="hero__cards">
+          <article class="lead-card lead-card--1">
+            <div class="lc__top"><span class="lc__dot lc__dot--hot"></span><span class="lc__name">Селлер WB</span><span class="lc__tag">Дизайн</span></div>
+            <p class="lc__signal">Инфографика карточек · конверсия <b>0.8%</b></p>
+            <div class="lc__foot"><span class="lc__ready">Оффер готов</span><span class="lc__send">Отправить</span></div>
+          </article>
+          <article class="lead-card lead-card--2">
+            <div class="lc__top"><span class="lc__dot lc__dot--warm"></span><span class="lc__name">Эксперт · 14k</span><span class="lc__tag">Продюсинг</span></div>
+            <p class="lc__signal">Аудитория растёт · <b>нет запусков</b></p>
+            <div class="lc__foot"><span class="lc__ready">Оффер готов</span><span class="lc__send">Отправить</span></div>
+          </article>
+          <article class="lead-card lead-card--3">
+            <div class="lc__top"><span class="lc__dot lc__dot--cold"></span><span class="lc__name">Барбершоп</span><span class="lc__tag">SMM</span></div>
+            <p class="lc__signal">Последний пост · <b>2 мес. назад</b></p>
+            <div class="lc__foot"><span class="lc__ready">Оффер готов</span><span class="lc__send">Отправить</span></div>
+          </article>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ============ INDEX STRIP ============ -->
   <div class="index-strip">
-    <div class="index-strip__inner container">
-      <span class="index-strip__label">Кому подходит</span>
-      <div class="index-strip__list">
-        <span>Монтажёры</span><span>Дизайнеры</span><span>Продюсеры</span><span>Копирайтеры</span>
-        <span>Фотографы</span><span>SMM</span><span>Таргетологи</span><span>Разработчики</span>
+    <div class="index-strip__inner">
+      <span class="index-strip__label">Кому&nbsp;подходит</span>
+      <div class="marquee">
+        <div class="marquee__track">
+          <span class="marquee__item">Монтажёры</span><span class="marquee__item">Дизайнеры</span><span class="marquee__item">Продюсеры</span><span class="marquee__item">Копирайтеры</span><span class="marquee__item">Фотографы</span><span class="marquee__item">SMM</span><span class="marquee__item">Таргетологи</span><span class="marquee__item">Разработчики</span><span class="marquee__item">Монтажёры</span><span class="marquee__item">Дизайнеры</span><span class="marquee__item">Продюсеры</span><span class="marquee__item">Копирайтеры</span><span class="marquee__item">Фотографы</span><span class="marquee__item">SMM</span><span class="marquee__item">Таргетологи</span><span class="marquee__item">Разработчики</span>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ============ PAIN ============ -->
   <section class="pain section container" id="pain">
-    <div class="sec-head reveal">
-      <span class="kicker">Узнаёшь?</span>
-      <h2>70% времени ты тратишь не&nbsp;на&nbsp;работу, а&nbsp;на&nbsp;выживание.</h2>
+    <div class="pain__head">
+      <div class="sec-head reveal">
+        <span class="kicker">Узнаёшь?</span>
+        <h2>70% времени ты тратишь не&nbsp;на&nbsp;работу, а&nbsp;на&nbsp;выживание.</h2>
+      </div>
+      <div class="ratio reveal" style="--d:.1s" aria-hidden="true">
+        <div class="ratio__row"><span class="ratio__k">Выживание</span><span class="ratio__v">70%</span></div>
+        <div class="ratio__bar"><span style="width:70%"></span></div>
+        <div class="ratio__row"><span class="ratio__k">Работа</span><span class="ratio__v ratio__v--ink">30%</span></div>
+        <div class="ratio__bar ratio__bar--ink"><span style="width:30%"></span></div>
+        <p class="ratio__cap">Поиск, переписки, демпинг — вместо того, за&nbsp;что&nbsp;платят.</p>
+      </div>
     </div>
     <div class="pain__grid">
       <article class="pain-card reveal" style="--d:.05s">
@@ -618,107 +667,147 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 
       <div class="niches__panels">
         <div class="niche-panel is-active" role="tabpanel" id="panel-design" aria-labelledby="tab-design" tabindex="0">
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">Дизайнеры маркетплейсов</span></div>
-          <h3>Wareon Design</h3>
-          <p class="niche-panel__pain">Писать селлерам в холодную — это собирать отказы. 99% не понимают, зачем менять дизайн, если «и так покупают».</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">Дизайнеры маркетплейсов</span></div>
+            <h3>Wareon Design</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск селлеров с товаром без инфографики</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Выявление карточек с конверсией ниже 2%</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Оффер с мини-аудитом упущенной прибыли</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти селлеров</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти селлеров</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">Писать селлерам в холодную — это собирать отказы. 99% не понимают, зачем менять дизайн, если «и так покупают».</p>
+          </aside>
         </div>
 
         <div class="niche-panel" role="tabpanel" id="panel-launch" aria-labelledby="tab-launch" tabindex="0" hidden>
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">Инфопродюсеры</span></div>
-          <h3>Wareon Launch</h3>
-          <p class="niche-panel__pain">Искать эксперта можно месяцами. Найдёшь с аудиторией — не хочет запускаться. Найдёшь готового — нет охватов.</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">Инфопродюсеры</span></div>
+            <h3>Wareon Launch</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск экспертов 10k+ без активных продуктов</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Анализ лояльности аудитории (ER)</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Скрипт закрытия на первый созвон</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти экспертов</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти экспертов</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">Искать эксперта можно месяцами. Найдёшь с аудиторией — не хочет запускаться. Найдёшь готового — нет охватов.</p>
+          </aside>
         </div>
 
         <div class="niche-panel" role="tabpanel" id="panel-reels" aria-labelledby="tab-reels" tabindex="0" hidden>
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">Видеомейкеры и монтажёры</span></div>
-          <h3>Wareon Reels</h3>
-          <p class="niche-panel__pain">70% времени уходит на рассылку портфолио блогерам, которые даже не читают директ. Ради одного заказа пишешь сотням.</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">Видеомейкеры и монтажёры</span></div>
+            <h3>Wareon Reels</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск аккаунтов с падающими охватами</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Оффер: «Как поднять просмотры в 2 раза»</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Прямые контакты PR-менеджеров</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти блогеров</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти блогеров</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">70% времени уходит на рассылку портфолио блогерам, которые даже не читают директ. Ради одного заказа пишешь сотням.</p>
+          </aside>
         </div>
 
         <div class="niche-panel" role="tabpanel" id="panel-copy" aria-labelledby="tab-copy" tabindex="0" hidden>
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">Копирайтеры и смысловики</span></div>
-          <h3>Wareon Copy</h3>
-          <p class="niche-panel__pain">Биржи с оплатой за знаки убивают мотивацию. Бизнес, готовый платить за смыслы дорого, не ищет исполнителей на фрилансе.</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">Копирайтеры и смысловики</span></div>
+            <h3>Wareon Copy</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск коммерческих сайтов с плохим SEO</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Парсинг воронок с «дырявой» конверсией</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Шаблоны писем, которые открывают</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">Биржи с оплатой за знаки убивают мотивацию. Бизнес, готовый платить за смыслы дорого, не ищет исполнителей на фрилансе.</p>
+          </aside>
         </div>
 
         <div class="niche-panel" role="tabpanel" id="panel-shot" aria-labelledby="tab-shot" tabindex="0" hidden>
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">Коммерческие фотографы</span></div>
-          <h3>Wareon Shot</h3>
-          <p class="niche-panel__pain">Тотальная зависимость от сарафанного радио. Нет заказов — сидишь без денег, потому что холодный поиск кажется спамом.</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">Коммерческие фотографы</span></div>
+            <h3>Wareon Shot</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск локального бизнеса с плохим визуалом</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Парсинг WB-товаров с любительскими фото</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Оффер с расчётом потерь из-за визуала</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">Тотальная зависимость от сарафанного радио. Нет заказов — сидишь без денег, потому что холодный поиск кажется спамом.</p>
+          </aside>
         </div>
 
         <div class="niche-panel" role="tabpanel" id="panel-social" aria-labelledby="tab-social" tabindex="0" hidden>
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">SMM-специалисты</span></div>
-          <h3>Wareon Social</h3>
-          <p class="niche-panel__pain">Страх поднять чек. Клиенты требуют гарантий продаж за 15к в месяц, а бренды с нормальными бюджетами кажутся недосягаемыми.</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">SMM-специалисты</span></div>
+            <h3>Wareon Social</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск бизнесов с заброшенными соцсетями</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Анализ частоты постинга конкурентов</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Готовый план развития на первый месяц</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бренды</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бренды</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">Страх поднять чек. Клиенты требуют гарантий продаж за 15к в месяц, а бренды с нормальными бюджетами кажутся недосягаемыми.</p>
+          </aside>
         </div>
 
         <div class="niche-panel" role="tabpanel" id="panel-ads" aria-labelledby="tab-ads" tabindex="0" hidden>
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">Таргетологи и директологи</span></div>
-          <h3>Wareon Ads</h3>
-          <p class="niche-panel__pain">Постоянный поиск связок выжигает. Клиент ушёл — судорожно ищешь нового, демпингуя на тестовом бюджете.</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">Таргетологи и директологи</span></div>
+            <h3>Wareon Ads</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск бизнеса, сливающего бюджет прямо сейчас</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Анализ креативов конкурентов</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Оффер с планом масштабирования</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">Постоянный поиск связок выжигает. Клиент ушёл — судорожно ищешь нового, демпингуя на тестовом бюджете.</p>
+          </aside>
         </div>
 
         <div class="niche-panel" role="tabpanel" id="panel-dev" aria-labelledby="tab-dev" tabindex="0" hidden>
-          <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          <div class="niche-panel__title"><span class="kicker kicker--plain">Разработчики и интеграторы</span></div>
-          <h3>Wareon Dev</h3>
-          <p class="niche-panel__pain">Ты делаешь гениальные автоворонки, но не умеешь перевести их ценность на язык бизнеса — в деньги и сэкономленные часы.</p>
-          <ul class="niche-panel__features">
+          <div class="np__main">
+            <div class="niche-panel__title"><span class="kicker kicker--plain">Разработчики и интеграторы</span></div>
+            <h3>Wareon Dev</h3>
+            <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск компаний с ручной обработкой заявок</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Расчёт экономики: сколько бизнес теряет</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Шаблоны КП для внедрения CRM и ботов</li>
           </ul>
-          <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти компании</a></div>
+            <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти компании</a></div>
+          </div>
+          <aside class="np__aside">
+            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span class="np__aside-label">Боль ниши</span>
+            <p class="niche-panel__pain">Ты делаешь гениальные автоворонки, но не умеешь перевести их ценность на язык бизнеса — в деньги и сэкономленные часы.</p>
+          </aside>
         </div>
       </div>
     </div>
@@ -757,11 +846,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       <aside class="pricing__aside reveal">
         <span class="kicker">Стоимость</span>
         <h2 style="margin-top:var(--s4)">Один клиент окупает подписку. Остальные — <span class="serif-i accent">чистая прибыль.</span></h2>
-        <ul>
-          <li><b>Автономные аккаунты.</b> Рассылка идёт с прогретых аккаунтов — без банов и потери контактов.</li>
-          <li><b>Платишь за объём.</b> Цена зависит только от числа сообщений в день и выбранных площадок.</li>
-          <li><b>Отмена в любой момент.</b> Никаких договоров и скрытых условий.</li>
-        </ul>
+        <ol class="advantages">
+          <li><span class="advantages__num">01</span><div class="advantages__body"><b>Автономные аккаунты.</b> Рассылка идёт с прогретых аккаунтов — без банов и потери контактов.</div></li>
+          <li><span class="advantages__num">02</span><div class="advantages__body"><b>Платишь за объём.</b> Цена зависит только от числа сообщений в день и выбранных площадок.</div></li>
+          <li><span class="advantages__num">03</span><div class="advantages__body"><b>Отмена в любой момент.</b> Никаких договоров и скрытых условий.</div></li>
+        </ol>
       </aside>
 
       <div class="calc reveal" style="--d:.1s">
