@@ -146,6 +146,20 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
 .offer__text{font-size:.85rem;color:var(--ink-70);line-height:1.5}
 .offer__foot{margin-top:var(--s4);display:flex;align-items:center;justify-content:space-between}
 .offer__stat{font-size:.78rem;color:var(--ink-50)}
+.offer--new{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;text-align:center;min-height:190px;border-style:dashed;cursor:pointer;transition:border-color .18s var(--ease),background .18s var(--ease)}
+.offer--new:hover{border-color:var(--accent);background:var(--paper-2)}
+
+/* offer editor modal */
+.ov-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:var(--s5);background:rgba(27,26,22,.42);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.ov-overlay[hidden]{display:none}
+.ov-box{position:relative;width:100%;max-width:440px;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-l);padding:clamp(1.5rem,1rem + 2vw,2.25rem);animation:ovin .3s var(--ease)}
+@keyframes ovin{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.ov-close{position:absolute;top:var(--s4);right:var(--s4);width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--ink-50)}
+.ov-close:hover{background:var(--paper-2);color:var(--ink)}
+.ov-label{display:block;margin-top:var(--s4);margin-bottom:var(--s2);font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-50)}
+.ov-input,.ov-textarea{width:100%;padding:.7rem .85rem;background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r-s);font-family:var(--sans);font-size:.95rem;color:var(--ink);resize:vertical}
+.ov-input:focus,.ov-textarea:focus{outline:none;border-color:var(--accent)}
+.ov-actions{display:flex;justify-content:flex-end;gap:var(--s3);margin-top:var(--s5)}
 
 /* settings */
 .set-row{display:grid;grid-template-columns:200px 1fr;gap:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--line)}
@@ -229,7 +243,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     </nav>
     <div class="side__user">
       <div class="side__avatar" id="avatar">Д</div>
-      <div class="side__uinfo"><div class="side__uname" id="uname">Дмитрий</div><div class="side__uplan">Тариф · Дизайн</div></div>
+      <div class="side__uinfo"><div class="side__uname" id="uname">Дмитрий</div><div class="side__uplan" id="sidePlan">Тариф · Дизайн</div></div>
       <button class="side__logout" id="logout" title="Выйти" aria-label="Выйти"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
     </div>
   </aside>
@@ -248,15 +262,15 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
         <div>
           <div class="topbar__kicker">Обзор</div>
           <h1>С возвращением, Дмитрий</h1>
-          <p class="topbar__sub">За сегодня система нашла <b>12</b> новых лидов под твою нишу.</p>
+          <p class="topbar__sub">За сегодня система нашла <b id="ovNew">12</b> новых <span id="ovNewWord">лидов</span> под нишу «<span id="ovNiche">Дизайн</span>».</p>
         </div>
         <button class="btn" data-nav="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> Смотреть лидов</button>
       </div>
 
       <div class="stats">
-        <div class="stat"><div class="stat__label">Найдено лидов</div><div class="stat__val">128</div><div class="stat__delta">+12 сегодня</div></div>
-        <div class="stat"><div class="stat__label">Офферов отправлено</div><div class="stat__val">43</div><div class="stat__delta">+8 за неделю</div></div>
-        <div class="stat"><div class="stat__label">Ответов</div><div class="stat__val">17</div><div class="stat__delta">39% конверсия</div></div>
+        <div class="stat"><div class="stat__label">Найдено лидов</div><div class="stat__val" id="statFound">128</div><div class="stat__delta" id="statFoundDelta">+12 сегодня</div></div>
+        <div class="stat"><div class="stat__label">Офферов отправлено</div><div class="stat__val" id="statSent">43</div><div class="stat__delta" id="statSentDelta">за всё время</div></div>
+        <div class="stat"><div class="stat__label">Ответов</div><div class="stat__val" id="statReplies">17</div><div class="stat__delta" id="statConv">39% конверсия</div></div>
         <div class="stat"><div class="stat__label">В работе</div><div class="stat__val">5</div><div class="stat__delta down">сделки на согласовании</div></div>
       </div>
 
@@ -268,10 +282,10 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
         <div class="panel">
           <div class="panel__head"><span class="panel__title">Лимит на сегодня</span></div>
           <div class="prog">
-            <div class="prog__top"><span>Отправлено сообщений</span><span><b>43</b> / 50</span></div>
-            <div class="prog__bar"><span style="width:86%"></span></div>
+            <div class="prog__top"><span>Отправлено сообщений</span><span><b id="limitSent">43</b> / <span id="limitMax">50</span></span></div>
+            <div class="prog__bar"><span id="limitBar" style="width:86%"></span></div>
           </div>
-          <p style="font-size:.82rem;color:var(--ink-70);margin-top:var(--s4);line-height:1.5">Рассылка идёт с <b>1 автономного аккаунта</b> — в безопасном темпе, без риска бана. Лимит обновится в 00:00.</p>
+          <p style="font-size:.82rem;color:var(--ink-70);margin-top:var(--s4);line-height:1.5">Рассылка идёт с <b id="limitAcc">1 автономного аккаунта</b> — в безопасном темпе, без риска бана. Лимит обновится в 00:00.</p>
           <div style="margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
             <span style="font-size:.85rem;color:var(--ink-70)">Хочешь больше в день?</span>
             <button class="btn btn--ghost btn--sm" data-nav="settings">Увеличить объём</button>
@@ -304,11 +318,11 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
       <div class="topbar">
         <div><div class="topbar__kicker">Офферы</div><h1>Шаблоны офферов</h1><p class="topbar__sub">Персональные заготовки под сигналы бизнеса. Wareon подставит детали автоматически.</p></div>
       </div>
-      <div class="offers">
-        <div class="offer"><div class="offer__niche">Дизайн · WB</div><div class="offer__title">Мини-аудит карточки</div><p class="offer__text">«Заметил, что у товара нет инфографики, а конверсия ниже средней по нише. Сделал разбор — показать, где теряются продажи?»</p><div class="offer__foot"><span class="offer__stat">Открытий 71%</span><button class="btn btn--ghost btn--sm">Изменить</button></div></div>
-        <div class="offer"><div class="offer__niche">Дизайн · WB</div><div class="offer__title">Упущенная прибыль</div><p class="offer__text">«По моим расчётам, слабый визуал карточки стоит вам ~X заказов в месяц. Готов показать до/после на вашем товаре.»</p><div class="offer__foot"><span class="offer__stat">Открытий 64%</span><button class="btn btn--ghost btn--sm">Изменить</button></div></div>
-        <div class="offer"><div class="offer__niche">Общий</div><div class="offer__title">Быстрый первый контакт</div><p class="offer__text">«Здравствуйте! Работаю с брендами в вашей нише, есть идея по улучшению карточек. Скинуть пример за 2 минуты?»</p><div class="offer__foot"><span class="offer__stat">Открытий 58%</span><button class="btn btn--ghost btn--sm">Изменить</button></div></div>
-        <div class="offer" style="border-style:dashed;display:grid;place-items:center;text-align:center;min-height:180px"><div><div style="font-size:1.6rem;color:var(--accent)">+</div><div class="offer__title" style="margin:.4rem 0 0">Новый шаблон</div><p class="offer__text">Создай свой оффер под сигнал</p></div></div>
+      <div class="offers" id="offersGrid">
+        <div class="offer"><div class="offer__niche">Дизайн · WB</div><div class="offer__title">Мини-аудит карточки</div><p class="offer__text">«Заметил, что у товара нет инфографики, а конверсия ниже средней по нише. Сделал разбор — показать, где теряются продажи?»</p><div class="offer__foot"><span class="offer__stat">Открытий 71%</span><button class="btn btn--ghost btn--sm js-offer-edit">Изменить</button></div></div>
+        <div class="offer"><div class="offer__niche">Дизайн · WB</div><div class="offer__title">Упущенная прибыль</div><p class="offer__text">«По моим расчётам, слабый визуал карточки стоит вам ~X заказов в месяц. Готов показать до/после на вашем товаре.»</p><div class="offer__foot"><span class="offer__stat">Открытий 64%</span><button class="btn btn--ghost btn--sm js-offer-edit">Изменить</button></div></div>
+        <div class="offer"><div class="offer__niche">Общий</div><div class="offer__title">Быстрый первый контакт</div><p class="offer__text">«Здравствуйте! Работаю с брендами в вашей нише, есть идея по улучшению карточек. Скинуть пример за 2 минуты?»</p><div class="offer__foot"><span class="offer__stat">Открытий 58%</span><button class="btn btn--ghost btn--sm js-offer-edit">Изменить</button></div></div>
+        <button class="offer offer--new js-offer-new" id="offerNew"><span style="font-size:1.6rem;color:var(--accent);line-height:1">+</span><span class="offer__title" style="margin:.4rem 0 0">Новый шаблон</span><span class="offer__text">Создай свой оффер под сигнал</span></button>
       </div>
     </section>
 
@@ -403,6 +417,22 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   </main>
 </div>
 
+<!-- offer editor modal -->
+<div class="ov-overlay" id="offerModal" hidden>
+  <div class="ov-box">
+    <button class="ov-close" id="offerClose" aria-label="Закрыть">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <span class="kicker">Оффер</span>
+    <h3 id="offerModalTitle" style="margin-top:var(--s2)">Редактировать оффер</h3>
+    <label class="ov-label">Название</label>
+    <input id="offerTitleInput" class="ov-input" type="text" placeholder="Например: Мини-аудит карточки">
+    <label class="ov-label">Текст оффера</label>
+    <textarea id="offerTextInput" class="ov-textarea" rows="5" placeholder="Текст, который увидит клиент…"></textarea>
+    <div class="ov-actions"><button class="btn btn--ghost btn--sm" id="offerCancel">Отмена</button><button class="btn btn--sm" id="offerSave">Сохранить</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg">Готово</span></div>
 
 <script>
@@ -438,68 +468,98 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   qs('#menuBtn').addEventListener('click',()=>{side.classList.add('open');bd.classList.add('show');});
   bd.addEventListener('click',closeSide);
 
-  /* leads data */
-  const POOL=[
-    {t:'hot',name:'Селлер WB',tag:'Одежда',sig:'Инфографика карточек · конверсия <b>0.8%</b>'},
-    {t:'hot',name:'Магазин Ozon',tag:'Косметика',sig:'12 товаров · <b>фото без обработки</b>'},
-    {t:'warm',name:'Бренд посуды',tag:'WB',sig:'Растут продажи · <b>устаревший дизайн</b>'},
-    {t:'hot',name:'Селлер WB',tag:'Детское',sig:'Новая карточка · <b>нет инфографики</b>'},
-    {t:'cold',name:'Локальная кофейня',tag:'Instagram',sig:'Последний пост · <b>3 нед. назад</b>'},
-    {t:'warm',name:'Селлер Ozon',tag:'Товары для дома',sig:'Конверсия <b>1.4%</b> · слабое главное фото'},
-    {t:'hot',name:'Магазин WB',tag:'Электроника',sig:'Топ выдачи · <b>карточка без рич-контента</b>'},
-    {t:'cold',name:'Барбершоп',tag:'Локальный',sig:'Оформление профиля · <b>устарело</b>'},
+  /* ---------- shared state (actions ripple across the dashboard) ---------- */
+  const esc=(s)=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const S={ found:128, sent:43, replies:17, dailyLimit:50, dailySent:43, niche:'Дизайн', open:12 };
+  let foundToday=12;
+  const accWord=(n)=>{const a=n%100,b=n%10,adj=(n===1)?'автономный':'автономных';let noun;if(a>10&&a<20)noun='аккаунтов';else if(b===1)noun='аккаунт';else if(b>=2&&b<=4)noun='аккаунта';else noun='аккаунтов';return adj+' '+noun;};
+  const R={};['statFound','statFoundDelta','statSent','statReplies','statConv','ovNew','ovNewWord','ovNiche','limitSent','limitMax','limitBar','limitAcc','sidePlan','leadBadge'].forEach(id=>R[id]=qs('#'+id));
+  const renderOverview=()=>{
+    R.statFound.textContent=S.found;
+    R.statFoundDelta.textContent='+'+foundToday+' сегодня';
+    R.statSent.textContent=S.sent;
+    R.statReplies.textContent=S.replies;
+    R.statConv.textContent=(S.sent?Math.round(S.replies/S.sent*100):0)+'% конверсия';
+    R.ovNew.textContent=foundToday; R.ovNewWord.textContent=pluralLead(foundToday); R.ovNiche.textContent=S.niche;
+    R.limitSent.textContent=S.dailySent; R.limitMax.textContent=S.dailyLimit;
+    R.limitBar.style.width=Math.min(100,Math.round(S.dailySent/S.dailyLimit*100))+'%';
+    const acc=Math.ceil(S.dailyLimit/50); R.limitAcc.textContent=acc+' '+accWord(acc);
+    R.sidePlan.textContent='Тариф · '+S.niche;
+    R.leadBadge.textContent=S.open;
+  };
+
+  /* ---------- leads: procedural generator (infinite) ---------- */
+  const NAMES=['Селлер WB','Магазин Ozon','Бренд посуды','Селлер Ozon','Локальный магазин','Инди-бренд','Магазин WB','Шоурум','Производитель','Онлайн-магазин'];
+  const TAGS=['Одежда','Косметика','Детское','Электроника','Товары для дома','Обувь','Аксессуары','Зоотовары','Спорт','Уход'];
+  const SIGS=['Инфографика карточек · конверсия <b>0.{d}%</b>','{n} товаров · <b>фото без обработки</b>','Растут продажи · <b>устаревший дизайн</b>','Новая карточка · <b>нет инфографики</b>','Топ выдачи · <b>слабое главное фото</b>','Конверсия <b>1.{d}%</b> · нет рич-контента','Отзывы 4.{d} · <b>карточка не продаёт</b>'];
+  const TEMPS=['hot','hot','warm','hot','warm','cold'];
+  const rnd=(a)=>a[Math.floor(Math.random()*a.length)];
+  const genLead=()=>({t:rnd(TEMPS),name:rnd(NAMES),tag:rnd(TAGS),sig:rnd(SIGS).replace('{d}',1+Math.floor(Math.random()*9)).replace('{n}',5+Math.floor(Math.random()*40)),sent:false});
+  let leads=[
+    {t:'hot',name:'Селлер WB',tag:'Одежда',sig:'Инфографика карточек · конверсия <b>0.8%</b>',sent:false},
+    {t:'hot',name:'Магазин Ozon',tag:'Косметика',sig:'12 товаров · <b>фото без обработки</b>',sent:false},
+    {t:'warm',name:'Бренд посуды',tag:'WB',sig:'Растут продажи · <b>устаревший дизайн</b>',sent:false},
+    {t:'hot',name:'Селлер WB',tag:'Детское',sig:'Новая карточка · <b>нет инфографики</b>',sent:false},
   ];
-  let leadN=0, sent=0, filter='all';
-  const leadList=qs('#leadList'), ovLeads=qs('#overviewLeads'), badge=qs('#leadBadge');
+  let filter='all';
+  const leadList=qs('#leadList'), ovLeads=qs('#overviewLeads');
+  const dotOf=(t)=>t==='hot'?'dot-hot':t==='warm'?'dot-warm':'dot-cold';
+  const leadRow=(l,i)=>`<div class="lead" data-t="${l.t}">
+      <span class="lead__dot ${dotOf(l.t)}"></span>
+      <div class="lead__body"><div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div><div class="lead__signal">${l.sig}</div></div>
+      <div class="lead__action">${l.sent?'<span class="sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Отправлено</span>':'<button class="btn btn--sm js-send" data-i="'+i+'">Отправить оффер</button>'}</div></div>`;
+  const applyFilter=()=>qsa('.lead',leadList).forEach(r=>{r.style.display=(filter==='all'||r.dataset.t===filter)?'':'none';});
+  const renderOv=()=>{ ovLeads.innerHTML=leads.slice(0,3).map(l=>`<div class="lead"><span class="lead__dot ${dotOf(l.t)}"></span><div class="lead__body"><div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div><div class="lead__signal">${l.sig}</div></div><div class="lead__action">${l.sent?'<span class="sent">Отправлено</span>':'<span class="lead__tag">Оффер готов</span>'}</div></div>`).join(''); };
+  const renderLeads=()=>{ leadList.innerHTML=leads.map(leadRow).join('')||'<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лидов».</p>'; applyFilter(); renderOv(); };
 
-  const leadRow=(l,idx)=>{
-    const dot=l.t==='hot'?'dot-hot':l.t==='warm'?'dot-warm':'dot-cold';
-    return `<div class="lead" data-t="${l.t}">
-      <span class="lead__dot ${dot}"></span>
-      <div class="lead__body">
-        <div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div>
-        <div class="lead__signal">${l.sig}</div>
-      </div>
-      <div class="lead__action">
-        <button class="btn btn--sm js-send" data-idx="${idx}">Отправить оффер</button>
-      </div></div>`;
+  const sendOffer=(i)=>{
+    if(!leads[i]||leads[i].sent)return;
+    if(S.dailySent>=S.dailyLimit){toast('Дневной лимит исчерпан — увеличь объём в «Настройках»');return;}
+    leads[i].sent=true; S.sent++; S.dailySent++; S.open=Math.max(0,S.open-1);
+    renderLeads(); renderOverview();
+    toast('Оффер отправлен · '+S.sent+' всего');
   };
+  leadList.addEventListener('click',e=>{const b=e.target.closest('.js-send');if(b)sendOffer(parseInt(b.dataset.i,10));});
 
-  const renderLeads=()=>{
-    const items=POOL.slice(0,leadN);
-    leadList.innerHTML = items.map((l,i)=>leadRow(l,i)).join('') || '<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лидов».</p>';
-    applyFilter();
-    bindSend();
-  };
-  const applyFilter=()=>{
-    qsa('.lead',leadList).forEach(r=>{r.style.display=(filter==='all'||r.dataset.t===filter)?'':'none';});
-  };
-  const bindSend=()=>{
-    qsa('.js-send',leadList).forEach(b=>b.addEventListener('click',()=>{
-      const row=b.closest('.lead__action');
-      row.innerHTML='<span class="sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Отправлено</span>';
-      sent++; toast('Оффер отправлен · '+sent+' сегодня');
-    }));
-  };
-
-  /* overview mini leads (static 3) */
-  ovLeads.innerHTML = POOL.slice(0,3).map((l,i)=>{
-    const dot=l.t==='hot'?'dot-hot':l.t==='warm'?'dot-warm':'dot-cold';
-    return `<div class="lead"><span class="lead__dot ${dot}"></span><div class="lead__body"><div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div><div class="lead__signal">${l.sig}</div></div><div class="lead__action"><span class="lead__tag">Оффер готов</span></div></div>`;
-  }).join('');
-
-  /* find more */
   const findBtn=qs('#findMore');
-  const findMore=()=>{
-    const add=Math.min(4,POOL.length-leadN);
-    if(add<=0){toast('Больше лидов на сегодня нет');return;}
-    findBtn.textContent='Ищем…';findBtn.style.opacity=.6;
-    setTimeout(()=>{leadN+=add;badge.textContent=leadN;renderLeads();findBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лидов';findBtn.style.opacity=1;toast('Найдено +'+add+' '+pluralLead(add));},900);
-  };
-  findBtn.addEventListener('click',findMore);
+  findBtn.addEventListener('click',()=>{
+    if(findBtn.dataset.busy)return; findBtn.dataset.busy='1';
+    findBtn.textContent='Ищем…'; findBtn.style.opacity=.6;
+    setTimeout(()=>{
+      const k=3+Math.floor(Math.random()*3);
+      for(let j=0;j<k;j++)leads.unshift(genLead());
+      S.found+=k; foundToday+=k; S.open+=k;
+      renderLeads(); renderOverview();
+      findBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лидов';
+      findBtn.style.opacity=1; findBtn.dataset.busy='';
+      toast('Найдено +'+k+' '+pluralLead(k));
+    },900);
+  });
   qs('#leadChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;qsa('.chip').forEach(x=>x.classList.remove('is-active'));c.classList.add('is-active');filter=c.dataset.f;applyFilter();});
 
-  leadN=Math.min(4,POOL.length); badge.textContent=12; renderLeads();
+  renderLeads(); renderOverview();
+
+  /* ---------- offer editor ---------- */
+  const offerModal=qs('#offerModal'),offerGrid=qs('#offersGrid'),offerNewBtn=qs('#offerNew'),
+        offerTitleEl=qs('#offerModalTitle'),offerTitleIn=qs('#offerTitleInput'),offerTextIn=qs('#offerTextInput');
+  let editingCard=null;
+  const openOffer=(card)=>{ editingCard=card;
+    if(card){offerTitleEl.textContent='Редактировать оффер';offerTitleIn.value=card.querySelector('.offer__title').textContent;offerTextIn.value=card.querySelector('.offer__text').textContent;}
+    else{offerTitleEl.textContent='Новый оффер';offerTitleIn.value='';offerTextIn.value='';}
+    offerModal.hidden=false; setTimeout(()=>offerTitleIn.focus(),60);
+  };
+  const closeOffer=()=>{offerModal.hidden=true;editingCard=null;};
+  offerGrid.addEventListener('click',e=>{ if(e.target.closest('.js-offer-new'))return openOffer(null); const ed=e.target.closest('.js-offer-edit'); if(ed)openOffer(ed.closest('.offer')); });
+  qs('#offerClose').addEventListener('click',closeOffer);
+  qs('#offerCancel').addEventListener('click',closeOffer);
+  offerModal.addEventListener('click',e=>{if(e.target===offerModal)closeOffer();});
+  qs('#offerSave').addEventListener('click',()=>{
+    const title=offerTitleIn.value.trim(), text=offerTextIn.value.trim();
+    if(!title){offerTitleIn.focus();return;}
+    if(editingCard){ editingCard.querySelector('.offer__title').textContent=title; editingCard.querySelector('.offer__text').textContent=text; toast('Оффер обновлён'); }
+    else{ const d=document.createElement('div'); d.className='offer'; d.innerHTML='<div class="offer__niche">'+esc(S.niche)+'</div><div class="offer__title">'+esc(title)+'</div><p class="offer__text">'+esc(text)+'</p><div class="offer__foot"><span class="offer__stat">Новый</span><button class="btn btn--ghost btn--sm js-offer-edit">Изменить</button></div>'; offerGrid.insertBefore(d,offerNewBtn); toast('Шаблон создан'); }
+    closeOffer();
+  });
 
   /* settings = full calculator ported from the landing */
   const range=qs('#calcRange');
@@ -536,7 +596,16 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     periods.forEach(p=>p.addEventListener('click',()=>{periods.forEach(x=>x.classList.remove('is-active'));p.classList.add('is-active');mult=parseFloat(p.dataset.mult);discount=parseFloat(p.dataset.discount);render();}));
     syncPlatforms();render();
     let pending=false;
-    cta.addEventListener('click',()=>{if(pending||cta.disabled)return;pending=true;cta.classList.add('is-loading');cta.textContent='Обновляем…';setTimeout(()=>{cta.classList.remove('is-loading');cta.textContent='Обновить конфигурацию';pending=false;toast('Конфигурация обновлена');},900);});
+    cta.addEventListener('click',()=>{if(pending||cta.disabled)return;pending=true;cta.classList.add('is-loading');cta.textContent='Обновляем…';
+      setTimeout(()=>{
+        const activeNiche=niches.find(n=>n.classList.contains('is-active'));
+        if(activeNiche)S.niche=activeNiche.textContent.trim();
+        S.dailyLimit=parseInt(range.value,10);
+        renderOverview();
+        cta.classList.remove('is-loading');cta.textContent='Обновить конфигурацию';pending=false;
+        toast('Конфигурация обновлена');
+      },900);
+    });
   }
 
   /* logout -> back to landing (works locally, Pages, htmlpreview) */
