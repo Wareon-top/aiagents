@@ -1164,7 +1164,8 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       const messages = parseInt(range.value, 10);
       countEl.textContent = messages;
       const accounts = Math.ceil(messages / 50);
-      antibanEl.innerHTML = `Выделяем <b>${accounts}</b> автономных аккаунт${accounts === 1 ? '' : (accounts < 5 ? 'а' : 'ов')} — безопасная рассылка без банов`;
+      const accWord = (n) => { const a=n%100,b=n%10,adj=(n===1)?'автономный':'автономных'; let noun; if(a>10&&a<20)noun='аккаунтов'; else if(b===1)noun='аккаунт'; else if(b>=2&&b<=4)noun='аккаунта'; else noun='аккаунтов'; return adj+' '+noun; };
+      antibanEl.innerHTML = `Выделяем <b>${accounts}</b> ${accWord(accounts)} — безопасная рассылка без банов`;
       let perMonth = accounts * PER_ACCOUNT;
       platforms.forEach(p => { if (p.classList.contains('is-active') && !p.classList.contains('is-locked')) perMonth += parseInt(p.dataset.price, 10) || 0; });
       if (hasHardNiche()) perMonth *= HARD_MULT;
