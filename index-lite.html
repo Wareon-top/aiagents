@@ -1115,16 +1115,18 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     }
   };
 
-  /* ---- 0a. Legal links: keep working via htmlpreview ---- */
-  if (location.href.includes('htmlpreview.github.io')) {
-    document.querySelectorAll('a[href^="legal.html"]').forEach((a) => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        const hash = (a.getAttribute('href').split('#')[1] || '');
-        location.href = location.href.replace(/index(?:-lite)?\.html/, 'legal.html') + (hash ? '#' + hash : '');
-      });
-    });
-  }
+  /* ---- 0a. Legal links: set real hrefs so a tap always opens the doc ---- */
+  document.querySelectorAll('a[href^="legal.html"]').forEach((a) => {
+    const hash = (a.getAttribute('href').split('#')[1] || '');
+    if (location.href.includes('htmlpreview.github.io')) {
+      // rebuild an absolute htmlpreview URL pointing at legal.html
+      const base = location.href.split('#')[0].replace(/index(?:-lite)?\.html/, 'legal.html');
+      a.setAttribute('href', base + (hash ? '#' + hash : ''));
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    }
+    // local / GitHub Pages: the relative "legal.html#..." href already works natively
+  });
 
   /* ---- 0b. Mobile menu ---- */
   const header = document.querySelector('.site-header');
