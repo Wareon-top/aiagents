@@ -223,7 +223,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
           <h1>С возвращением, Дмитрий</h1>
           <p class="topbar__sub">За сегодня система нашла <b>12</b> новых лидов под твою нишу.</p>
         </div>
-        <button class="btn" data-nav="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> Смотреть лиды</button>
+        <button class="btn" data-nav="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> Смотреть лидов</button>
       </div>
 
       <div class="stats">
@@ -261,7 +261,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
           <h1>Найденные клиенты</h1>
           <p class="topbar__sub">Бизнесы, которым прямо сейчас нужна твоя работа. Оффер под каждого уже готов.</p>
         </div>
-        <button class="btn" id="findMore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лиды</button>
+        <button class="btn" id="findMore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лидов</button>
       </div>
       <div class="chips" id="leadChips">
         <button class="chip is-active" data-f="all">Все</button>
@@ -340,6 +340,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
   /* toast */
   let toastT;
   const toast=(msg)=>{const t=qs('#toast');qs('#toastMsg').textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);};
+  const pluralLead=(n)=>{const a=Math.abs(n)%100,b=n%10;if(a>10&&a<20)return 'лидов';if(b===1)return 'лид';if(b>=2&&b<=4)return 'лида';return 'лидов';};
 
   /* personalize from ?name= or stored (fallback Дмитрий) */
   try{const p=new URLSearchParams(location.search).get('name');if(p){qs('#uname').textContent=p;qs('#avatar').textContent=p[0].toUpperCase();qsa('h1').forEach(h=>{if(h.textContent.includes('Дмитрий'))h.textContent=h.textContent.replace('Дмитрий',p);});}}catch(e){}
@@ -394,7 +395,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
 
   const renderLeads=()=>{
     const items=POOL.slice(0,leadN);
-    leadList.innerHTML = items.map((l,i)=>leadRow(l,i)).join('') || '<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лиды».</p>';
+    leadList.innerHTML = items.map((l,i)=>leadRow(l,i)).join('') || '<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лидов».</p>';
     applyFilter();
     bindSend();
   };
@@ -421,7 +422,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
     const add=Math.min(4,POOL.length-leadN);
     if(add<=0){toast('Больше лидов на сегодня нет');return;}
     findBtn.textContent='Ищем…';findBtn.style.opacity=.6;
-    setTimeout(()=>{leadN+=add;badge.textContent=leadN;renderLeads();findBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лиды';findBtn.style.opacity=1;toast('Найдено +'+add+' лида');},900);
+    setTimeout(()=>{leadN+=add;badge.textContent=leadN;renderLeads();findBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лидов';findBtn.style.opacity=1;toast('Найдено +'+add+' '+pluralLead(add));},900);
   };
   findBtn.addEventListener('click',findMore);
   qs('#leadChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;qsa('.chip').forEach(x=>x.classList.remove('is-active'));c.classList.add('is-active');filter=c.dataset.f;applyFilter();});
