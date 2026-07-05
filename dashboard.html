@@ -480,6 +480,9 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
 
 <script>
 (function(){
+  /* auth gate: require a valid session, else back to landing */
+  var __s=null; try{__s=JSON.parse(localStorage.getItem('wareon_session')||'null');}catch(e){}
+  if(!__s||!__s.user){ var __h=location.href; location.href=__h.includes('htmlpreview.github.io')?__h.replace('dashboard.html','index-lite.html'):'index.html'; return; }
   const qs=(s,e=document)=>e.querySelector(s), qsa=(s,e=document)=>Array.from(e.querySelectorAll(s));
 
   /* toast */
@@ -488,7 +491,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   const pluralLead=(n)=>{const a=Math.abs(n)%100,b=n%10;if(a>10&&a<20)return 'лидов';if(b===1)return 'лид';if(b>=2&&b<=4)return 'лида';return 'лидов';};
 
   /* personalize from ?name= or stored (fallback Дмитрий) */
-  try{const p=new URLSearchParams(location.search).get('name');if(p){qs('#uname').textContent=p;qs('#avatar').textContent=p[0].toUpperCase();qsa('h1').forEach(h=>{if(h.textContent.includes('Дмитрий'))h.textContent=h.textContent.replace('Дмитрий',p);});}}catch(e){}
+  try{const nm=(__s&&__s.user&&__s.user.name)||new URLSearchParams(location.search).get('name');if(nm){qs('#uname').textContent=nm;const av=qs('#avatar');if(av)av.textContent=nm[0].toUpperCase();qsa('h1').forEach(h=>{if(h.textContent.includes('Дмитрий'))h.textContent=h.textContent.replace('Дмитрий',nm);});}}catch(e){}
 
   /* onboarding — show once (first visit) */
   const welcome=qs('#welcome');
@@ -686,6 +689,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
 
   /* logout -> back to landing (works locally, Pages, htmlpreview) */
   qs('#logout').addEventListener('click',()=>{
+    try{localStorage.removeItem('wareon_session');}catch(e){}
     const h=location.href;
     if(h.includes('htmlpreview.github.io')){location.href=h.replace('dashboard.html','index-lite.html');}
     else{location.href='index.html';}
