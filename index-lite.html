@@ -7,7 +7,7 @@
 <meta name="description" content="Wareon анализирует тысячи бизнесов, находит тех, кому нужна твоя работа, и выдаёт готовые контакты с персональным оффером. От регистрации до первого клиента — 10 минут.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Onest:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
 <style>
-/* fonts loaded via Google Fonts link in <head> */
+/* Google Fonts via <head> link */
 
 /* ============================================================
    WAREON ECOSYSTEM — Editorial redesign
@@ -102,7 +102,7 @@ h2{ font-size:var(--fs-h2); }
 h3{ font-size:var(--fs-h3); line-height:1.12; }
 h4{ font-family:var(--sans); font-size:var(--fs-h4); font-weight:600; letter-spacing:-0.01em; line-height:1.25; }
 p{ text-wrap:pretty; }
-.serif-i{ font-style:italic; }
+.serif-i{ font-style:normal; }
 
 /* eyebrow / kicker — mono, tracked */
 .kicker{
@@ -210,7 +210,7 @@ p{ text-wrap:pretty; }
 .hero{ padding-top:clamp(3rem,2rem + 4vw,5.5rem); padding-bottom:clamp(3rem,2rem + 4vw,5rem); }
 .hero__grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:center; }
 .hero__title{ margin-top:var(--s5); font-size:var(--fs-display); }
-.hero__title em{ font-style:italic; color:var(--accent); }
+.hero__title em{ font-style:normal; color:var(--accent); }
 .hero__lead{ margin-top:var(--s5); font-size:var(--fs-body-lg); color:var(--ink-70); max-width:40ch; }
 .hero__actions{ margin-top:var(--s6); display:flex; flex-wrap:wrap; align-items:center; gap:var(--s4) var(--s5); }
 .hero__meta{ margin-top:var(--s6); padding-top:var(--s5); border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:var(--s5) var(--s6); }
@@ -298,20 +298,13 @@ p{ text-wrap:pretty; }
 .niches__count{ display:inline-flex; align-items:baseline; gap:var(--s3); margin-top:var(--s4); font-family:var(--mono); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-50); }
 .niches__count b{ font-family:var(--serif); font-size:1.5rem; font-weight:500; color:var(--accent); letter-spacing:-0.01em; }
 
-.niches__layout{ margin-top:var(--s7); display:grid; grid-template-columns:minmax(230px,290px) 1fr; gap:clamp(3rem,2rem + 5vw,7.5rem); align-items:start; }
+.niches__layout{ margin-top:var(--s7); display:grid; grid-template-columns:minmax(220px,270px) 1fr; gap:clamp(2.5rem,1.5rem + 5vw,7rem); align-items:stretch; }
 
-/* vertical rail — capped height, scrolls, fades at bottom (JS syncs height) */
-.niches__rail{
-  display:flex; flex-direction:column; border-top:1px solid var(--line);
-  overflow-y:auto; overscroll-behavior:contain;
-  scrollbar-width:none;
-  -webkit-mask-image:linear-gradient(to bottom,#000 82%,transparent);
-  mask-image:linear-gradient(to bottom,#000 82%,transparent);
-}
-.niches__rail::-webkit-scrollbar{ display:none; }
+/* vertical rail — fills the column height; tabs distribute evenly */
+.niches__rail{ display:flex; flex-direction:column; border-top:1px solid var(--line); }
 .niche-tab{
-  position:relative; flex:none; text-align:left; width:100%; overflow:hidden; isolation:isolate;
-  padding:var(--s5) var(--s5) var(--s5) var(--s4);
+  position:relative; flex:1 1 auto; text-align:left; width:100%; overflow:hidden; isolation:isolate;
+  padding:var(--s4) var(--s5) var(--s4) var(--s4);
   border-bottom:1px solid var(--line);
   font-size:var(--fs-body); font-weight:500; color:var(--ink-70);
   display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
@@ -329,7 +322,7 @@ p{ text-wrap:pretty; }
 .niches__panels{ display:grid; }
 .niche-panel{
   grid-area:1 / 1;
-  display:grid; grid-template-columns:1.05fr 0.95fr; gap:var(--s5); align-items:stretch;
+  display:grid; grid-template-columns:1fr 0.85fr; gap:var(--s5); align-items:stretch;
   opacity:0; visibility:hidden; transform:translateY(10px);
   transition:opacity var(--t2) var(--ease), transform var(--t2) var(--ease), visibility 0s linear var(--t2);
   pointer-events:none;
@@ -350,23 +343,24 @@ p{ text-wrap:pretty; }
   .niche-panel.is-active .np__main > *, .niche-panel.is-active .np__aside{ animation:none; }
 }
 
-/* middle block — now a framed white card, matches the right one */
-.np__main{ min-width:0; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); padding:clamp(1.5rem,1rem + 2vw,2.5rem); }
+/* middle block — framed white card, icon sits next to the title */
+.np__main{ min-width:0; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line-2); border-radius:var(--radius-l); padding:clamp(1.5rem,1rem + 2vw,2.25rem); }
 .niche-panel__title{ display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap; }
-.np__main h3{ margin-top:var(--s2); }
+.np__title-row{ display:flex; align-items:center; gap:var(--s3); margin-top:var(--s3); }
+.np__title-row h3{ margin:0; }
 .niche-panel__features{ margin-top:var(--s6); display:grid; gap:var(--s5); }
 .niche-panel__features li{ display:flex; align-items:flex-start; gap:var(--s4); font-size:var(--fs-body); }
 .niche-panel__features .tick{ flex-shrink:0; width:20px; height:20px; margin-top:3px; color:var(--accent); }
-.niche-panel__cta{ margin-top:auto; padding-top:var(--s7); }
+.niche-panel__cta{ margin-top:auto; padding-top:var(--s6); }
 
-/* right column — framed pull-quote card, matches middle block */
-.np__aside{ position:relative; display:flex; flex-direction:column; padding:clamp(1.5rem,1rem + 2vw,2.5rem); background:var(--paper-2); border:1px solid var(--line-2); border-radius:var(--radius-l); }
-.np__aside .niche-panel__pain{ margin-top:auto; }
-.niche-panel__icon{ width:38px; height:38px; color:var(--accent); }
-.np__aside-label{ display:block; margin-top:var(--s5); font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
+/* niche icon — inline with the title */
+.niche-panel__icon{ width:28px; height:28px; flex-shrink:0; color:var(--accent); }
+
+/* right column — framed pull-quote card, content centred so no empty gap */
+.np__aside{ position:relative; display:flex; flex-direction:column; justify-content:center; padding:clamp(1.5rem,1rem + 2vw,2.25rem); background:var(--paper-2); border:1px solid var(--line-2); border-radius:var(--radius-l); }
+.np__aside-label{ display:block; margin-bottom:var(--s4); font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
 .niche-panel__pain{
-  margin-top:var(--s3);
-  font-family:var(--serif); font-style:italic; font-size:var(--fs-h3); line-height:1.32; color:var(--ink); text-wrap:pretty;
+  font-family:var(--serif); font-style:normal; font-weight:500; font-size:var(--fs-h4); line-height:1.42; color:var(--ink); text-wrap:pretty;
 }
 
 /* ============================================================
@@ -504,7 +498,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
   .niches__head{ grid-template-columns:1fr; gap:var(--s5); }
   .niches__rail{ flex-direction:row; overflow-x:auto; overflow-y:visible; max-height:none !important; border-top:0; border-bottom:1px solid var(--line); scrollbar-width:none; margin-bottom:var(--s6); -webkit-mask-image:none; mask-image:none; }
   .niches__rail::-webkit-scrollbar{ display:none; }
-  .niche-tab{ flex-shrink:0; width:auto; border-bottom:0; border-right:1px solid var(--line); padding:var(--s3) var(--s5); }
+  .niche-tab{ flex:0 0 auto; width:auto; border-bottom:0; border-right:1px solid var(--line); padding:var(--s3) var(--s5); }
   .niche-tab::before{ top:auto; bottom:0; left:0; right:0; width:auto; height:2px; transform:scaleX(0); }
   .niche-tab.is-active::before{ transform:scaleX(1); }
   .niche-tab:hover{ padding-left:var(--s5); }
@@ -677,7 +671,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel is-active" role="tabpanel" id="panel-design" aria-labelledby="tab-design" tabindex="0">
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">Дизайнеры маркетплейсов</span></div>
-            <h3>Wareon Design</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg><h3>Wareon Design</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск селлеров с товаром без инфографики</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Выявление карточек с конверсией ниже 2%</li>
@@ -686,7 +680,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти селлеров</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">Писать селлерам в холодную — это собирать отказы. 99% не понимают, зачем менять дизайн, если «и так покупают».</p>
           </aside>
@@ -695,7 +688,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel" role="tabpanel" id="panel-launch" aria-labelledby="tab-launch" tabindex="0" hidden>
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">Инфопродюсеры</span></div>
-            <h3>Wareon Launch</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg><h3>Wareon Launch</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск экспертов 10k+ без активных продуктов</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Анализ лояльности аудитории (ER)</li>
@@ -704,7 +697,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти экспертов</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">Искать эксперта можно месяцами. Найдёшь с аудиторией — не хочет запускаться. Найдёшь готового — нет охватов.</p>
           </aside>
@@ -713,7 +705,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel" role="tabpanel" id="panel-reels" aria-labelledby="tab-reels" tabindex="0" hidden>
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">Видеомейкеры и монтажёры</span></div>
-            <h3>Wareon Reels</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><h3>Wareon Reels</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск аккаунтов с падающими охватами</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Оффер: «Как поднять просмотры в 2 раза»</li>
@@ -722,7 +714,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти блогеров</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">70% времени уходит на рассылку портфолио блогерам, которые даже не читают директ. Ради одного заказа пишешь сотням.</p>
           </aside>
@@ -731,7 +722,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel" role="tabpanel" id="panel-copy" aria-labelledby="tab-copy" tabindex="0" hidden>
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">Копирайтеры и смысловики</span></div>
-            <h3>Wareon Copy</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><h3>Wareon Copy</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск коммерческих сайтов с плохим SEO</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Парсинг воронок с «дырявой» конверсией</li>
@@ -740,7 +731,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">Биржи с оплатой за знаки убивают мотивацию. Бизнес, готовый платить за смыслы дорого, не ищет исполнителей на фрилансе.</p>
           </aside>
@@ -749,7 +739,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel" role="tabpanel" id="panel-shot" aria-labelledby="tab-shot" tabindex="0" hidden>
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">Коммерческие фотографы</span></div>
-            <h3>Wareon Shot</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><h3>Wareon Shot</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск локального бизнеса с плохим визуалом</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Парсинг WB-товаров с любительскими фото</li>
@@ -758,7 +748,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">Тотальная зависимость от сарафанного радио. Нет заказов — сидишь без денег, потому что холодный поиск кажется спамом.</p>
           </aside>
@@ -767,7 +756,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel" role="tabpanel" id="panel-social" aria-labelledby="tab-social" tabindex="0" hidden>
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">SMM-специалисты</span></div>
-            <h3>Wareon Social</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><h3>Wareon Social</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск бизнесов с заброшенными соцсетями</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Анализ частоты постинга конкурентов</li>
@@ -776,7 +765,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бренды</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">Страх поднять чек. Клиенты требуют гарантий продаж за 15к в месяц, а бренды с нормальными бюджетами кажутся недосягаемыми.</p>
           </aside>
@@ -785,7 +773,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel" role="tabpanel" id="panel-ads" aria-labelledby="tab-ads" tabindex="0" hidden>
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">Таргетологи и директологи</span></div>
-            <h3>Wareon Ads</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><h3>Wareon Ads</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск бизнеса, сливающего бюджет прямо сейчас</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Анализ креативов конкурентов</li>
@@ -794,7 +782,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">Постоянный поиск связок выжигает. Клиент ушёл — судорожно ищешь нового, демпингуя на тестовом бюджете.</p>
           </aside>
@@ -803,7 +790,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <div class="niche-panel" role="tabpanel" id="panel-dev" aria-labelledby="tab-dev" tabindex="0" hidden>
           <div class="np__main">
             <div class="niche-panel__title"><span class="kicker kicker--plain">Разработчики и интеграторы</span></div>
-            <h3>Wareon Dev</h3>
+            <div class="np__title-row"><svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><h3>Wareon Dev</h3></div>
             <ul class="niche-panel__features">
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Поиск компаний с ручной обработкой заявок</li>
             <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg> Расчёт экономики: сколько бизнес теряет</li>
@@ -812,7 +799,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти компании</a></div>
           </div>
           <aside class="np__aside">
-            <svg class="niche-panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             <span class="np__aside-label">Боль ниши</span>
             <p class="niche-panel__pain">Ты делаешь гениальные автоворонки, но не умеешь перевести их ценность на язык бизнеса — в деньги и сэкономленные часы.</p>
           </aside>
@@ -857,7 +843,8 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <ol class="advantages">
           <li><span class="advantages__num">01</span><div class="advantages__body"><b>Автономные аккаунты.</b> Рассылка идёт с прогретых аккаунтов — без банов и потери контактов.</div></li>
           <li><span class="advantages__num">02</span><div class="advantages__body"><b>Платишь за объём.</b> Цена зависит только от числа сообщений в день и выбранных площадок.</div></li>
-          <li><span class="advantages__num">03</span><div class="advantages__body"><b>Отмена в любой момент.</b> Никаких договоров и скрытых условий.</div></li>
+          <li><span class="advantages__num">03</span><div class="advantages__body"><b>Персональный оффер.</b> Под каждый лид — готовый текст под его сигнал, а не общий шаблон.</div></li>
+          <li><span class="advantages__num">04</span><div class="advantages__body"><b>Отмена в любой момент.</b> Никаких договоров и скрытых условий — платишь, пока это приносит клиентов.</div></li>
         </ol>
       </aside>
 
@@ -1013,12 +1000,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
   if (tablist) {
     const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
     const panels = Array.from(document.querySelectorAll('.niche-panel'));
-    const panelsWrap = document.querySelector('.niches__panels');
-    const syncRailHeight = () => {
-      if (!panelsWrap) return;
-      if (window.matchMedia('(max-width:900px)').matches) { tablist.style.maxHeight = ''; return; }
-      tablist.style.maxHeight = panelsWrap.offsetHeight + 'px';
-    };
     const activate = (tab, setFocus) => {
       if (!tab || tab.getAttribute('aria-selected') === 'true') return;
       tabs.forEach((t) => {
@@ -1035,7 +1016,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       });
       if (setFocus) tab.focus();
       tab.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
-      requestAnimationFrame(syncRailHeight);
     };
     tablist.addEventListener('click', (e) => { const t = e.target.closest('[role="tab"]'); if (t) activate(t, false); });
     tablist.addEventListener('keydown', (e) => {
@@ -1051,10 +1031,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       }
       e.preventDefault(); activate(next, true);
     });
-    // keep the rail the same height as the panels; extra niches scroll into view
-    window.addEventListener('load', syncRailHeight);
-    window.addEventListener('resize', syncRailHeight);
-    setTimeout(syncRailHeight, 300);
   }
 
   /* ---- 3. Auth modal ---- */
