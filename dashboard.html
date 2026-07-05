@@ -41,7 +41,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
 .side__logo{width:26px;height:26px;color:var(--ink);flex-shrink:0}
 .side__name{font-family:var(--sans);font-weight:700;font-size:1.05rem;letter-spacing:-0.02em;line-height:1}
 .side__by{display:block;font-family:var(--mono);font-size:.56rem;font-weight:500;letter-spacing:.22em;color:var(--ink-50);margin-top:2px}
-.side__nav{display:flex;flex-direction:column;gap:2px;flex:1;}
+.side__nav{display:flex;flex-direction:column;gap:2px;}
 .side__label{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-50);padding:var(--s3) var(--s3) var(--s2);}
 .nav-item{display:flex;align-items:center;gap:var(--s3);padding:.7rem var(--s3);border-radius:var(--r-s);color:var(--ink-70);font-weight:500;font-size:.95rem;transition:background .18s var(--ease),color .18s var(--ease);position:relative;}
 .nav-item svg{width:19px;height:19px;flex-shrink:0;color:var(--ink-50);transition:color .18s var(--ease)}
@@ -118,12 +118,13 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
 .chip:hover{border-color:var(--ink)}
 .chip.is-active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
-/* mini bar chart */
-.bars{display:flex;align-items:flex-end;gap:var(--s3);height:150px;margin-top:var(--s4)}
-.bars__col{flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--s2);height:100%;justify-content:flex-end}
-.bars__bar{width:100%;max-width:34px;background:var(--accent-tint);border-radius:var(--r-s) var(--r-s) 0 0;position:relative;transition:height .6s var(--ease)}
-.bars__bar::after{content:attr(data-v);position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.66rem;color:var(--ink-50)}
+/* mini bar chart — values sit on a shared baseline under each bar */
+.bars{display:flex;align-items:flex-end;gap:var(--s3);margin-top:var(--s5)}
+.bars__col{flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--s2)}
+.bars__track{height:150px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.bars__bar{width:100%;max-width:34px;background:var(--accent-tint);border-radius:var(--r-s) var(--r-s) 0 0;transition:height .6s var(--ease)}
 .bars__bar.hot{background:var(--accent)}
+.bars__val{font-family:var(--mono);font-weight:600;font-size:.8rem;color:var(--ink)}
 .bars__lbl{font-family:var(--mono);font-size:.62rem;color:var(--ink-50);text-transform:uppercase}
 
 /* account cards */
@@ -291,13 +292,13 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
         <div class="panel">
           <div class="panel__head"><span class="panel__title">Сообщения по дням</span><span class="offer__stat">за 7 дней</span></div>
           <div class="bars">
-            <div class="bars__col"><div class="bars__bar" data-v="32" style="height:64%"></div><span class="bars__lbl">Пн</span></div>
-            <div class="bars__col"><div class="bars__bar" data-v="45" style="height:90%"></div><span class="bars__lbl">Вт</span></div>
-            <div class="bars__col"><div class="bars__bar" data-v="38" style="height:76%"></div><span class="bars__lbl">Ср</span></div>
-            <div class="bars__col"><div class="bars__bar" data-v="50" style="height:100%"></div><span class="bars__lbl">Чт</span></div>
-            <div class="bars__col"><div class="bars__bar" data-v="41" style="height:82%"></div><span class="bars__lbl">Пт</span></div>
-            <div class="bars__col"><div class="bars__bar" data-v="29" style="height:58%"></div><span class="bars__lbl">Сб</span></div>
-            <div class="bars__col"><div class="bars__bar hot" data-v="43" style="height:86%"></div><span class="bars__lbl">Вс</span></div>
+            <div class="bars__col"><div class="bars__track"><div class="bars__bar" style="height:64%"></div></div><span class="bars__val">32</span><span class="bars__lbl">Пн</span></div>
+            <div class="bars__col"><div class="bars__track"><div class="bars__bar" style="height:90%"></div></div><span class="bars__val">45</span><span class="bars__lbl">Вт</span></div>
+            <div class="bars__col"><div class="bars__track"><div class="bars__bar" style="height:76%"></div></div><span class="bars__val">38</span><span class="bars__lbl">Ср</span></div>
+            <div class="bars__col"><div class="bars__track"><div class="bars__bar" style="height:100%"></div></div><span class="bars__val">50</span><span class="bars__lbl">Чт</span></div>
+            <div class="bars__col"><div class="bars__track"><div class="bars__bar" style="height:82%"></div></div><span class="bars__val">41</span><span class="bars__lbl">Пт</span></div>
+            <div class="bars__col"><div class="bars__track"><div class="bars__bar" style="height:58%"></div></div><span class="bars__val">29</span><span class="bars__lbl">Сб</span></div>
+            <div class="bars__col"><div class="bars__track"><div class="bars__bar hot" style="height:86%"></div></div><span class="bars__val">43</span><span class="bars__lbl">Вс</span></div>
           </div>
         </div>
         <div class="panel">
