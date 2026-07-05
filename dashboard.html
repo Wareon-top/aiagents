@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wareon — Личный кабинет</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Onest:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FDFCFA; --paper-2:#F5F2EB; --paper-3:#EBE6DB; --card:#FFFFFF;
+  --ink:#1B1A16; --ink-70:#514C43; --ink-50:#857E71;
+  --line:#E7E1D4; --line-2:#D8CFBD;
+  --accent:#B24A1E; --accent-2:#8F3A16; --accent-tint:#F3E4D9; --on-accent:#FCF6EF;
+  --warm:#C8922E; --green:#4B7A46;
+  --serif:'Playfair Display','Times New Roman',serif;
+  --sans:'Onest',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.5rem;--s6:2rem;--s7:3rem;
+  --r-s:6px;--r-m:12px;--r-l:18px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --sidebar:264px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+img,svg{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+body{font-family:var(--sans);font-size:15px;line-height:1.5;color:var(--ink);background:var(--paper-2);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-height:1.1;}
+.mono{font-family:var(--mono);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px;}
+
+.app{display:grid;grid-template-columns:var(--sidebar) 1fr;min-height:100vh;}
+.side-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;visibility:hidden;transition:.3s var(--ease);z-index:40;}
+.side-backdrop.show{opacity:1;visibility:visible;}
+
+/* ---------- sidebar ---------- */
+.side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;background:var(--paper);border-right:1px solid var(--line);padding:var(--s5) var(--s4);}
+.side__brand{display:flex;align-items:center;gap:.6rem;padding:var(--s2) var(--s3) var(--s6);}
+.side__logo{width:26px;height:26px;color:var(--ink);flex-shrink:0}
+.side__name{font-family:var(--sans);font-weight:700;font-size:1.05rem;letter-spacing:-0.02em;line-height:1}
+.side__by{display:block;font-family:var(--mono);font-size:.56rem;font-weight:500;letter-spacing:.22em;color:var(--ink-50);margin-top:2px}
+.side__nav{display:flex;flex-direction:column;gap:2px;flex:1;}
+.side__label{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-50);padding:var(--s3) var(--s3) var(--s2);}
+.nav-item{display:flex;align-items:center;gap:var(--s3);padding:.7rem var(--s3);border-radius:var(--r-s);color:var(--ink-70);font-weight:500;font-size:.95rem;transition:background .18s var(--ease),color .18s var(--ease);position:relative;}
+.nav-item svg{width:19px;height:19px;flex-shrink:0;color:var(--ink-50);transition:color .18s var(--ease)}
+.nav-item:hover{background:var(--paper-2);color:var(--ink)}
+.nav-item.is-active{background:var(--accent-tint);color:var(--accent-2)}
+.nav-item.is-active svg{color:var(--accent)}
+.nav-item__badge{margin-left:auto;font-family:var(--mono);font-size:.68rem;background:var(--accent);color:var(--on-accent);padding:1px 7px;border-radius:99px}
+.side__user{border-top:1px solid var(--line);padding-top:var(--s4);margin-top:var(--s4);display:flex;align-items:center;gap:var(--s3);}
+.side__avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-weight:600;flex-shrink:0}
+.side__uinfo{min-width:0;flex:1}
+.side__uname{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side__uplan{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-50)}
+.side__logout{width:32px;height:32px;display:grid;place-items:center;border-radius:var(--r-s);color:var(--ink-50);flex-shrink:0}
+.side__logout:hover{background:var(--paper-2);color:var(--accent)}
+
+/* ---------- main ---------- */
+.main{padding:var(--s6) clamp(1rem,1rem + 2vw,2.5rem) var(--s7);max-width:1180px;}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--s4);flex-wrap:wrap;margin-bottom:var(--s6);}
+.topbar__kicker{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-50);margin-bottom:var(--s2)}
+.topbar h1{font-size:clamp(1.75rem,1.3rem + 1.6vw,2.5rem)}
+.topbar__sub{color:var(--ink-70);margin-top:var(--s2);font-size:.95rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.3rem;border-radius:var(--r-s);font-weight:500;font-size:.9rem;background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);box-shadow:0 3px 0 var(--accent-2);transition:transform .12s var(--ease),box-shadow .12s var(--ease),background .18s var(--ease)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--accent-2)}
+.btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--accent-2)}
+.btn--ghost{background:transparent;color:var(--ink);border-color:var(--line-2);box-shadow:0 3px 0 var(--line-2)}
+.btn--ghost:hover{background:var(--paper)}
+.btn--sm{padding:.5rem .9rem;font-size:.82rem;box-shadow:0 2px 0 var(--accent-2)}
+.btn--sm:hover{box-shadow:0 4px 0 var(--accent-2)}
+.btn svg{width:16px;height:16px}
+
+/* sections */
+.section{display:none;animation:fade .4s var(--ease)}
+.section.is-active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* stat tiles */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s4);margin-bottom:var(--s6)}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--s5)}
+.stat__label{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-50)}
+.stat__val{font-family:var(--serif);font-size:2.4rem;font-weight:500;letter-spacing:-0.02em;line-height:1;margin-top:var(--s3)}
+.stat__delta{font-size:.8rem;margin-top:var(--s2);color:var(--green)}
+.stat__delta.down{color:var(--accent)}
+
+.grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:var(--s5)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--s5)}
+.panel__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s4)}
+.panel__title{font-family:var(--sans);font-weight:600;font-size:1.05rem}
+.panel__link{font-size:.82rem;color:var(--accent);font-weight:500}
+
+/* lead rows */
+.lead{display:flex;align-items:center;gap:var(--s4);padding:var(--s4) 0;border-top:1px solid var(--line)}
+.lead:first-child{border-top:0}
+.lead__dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dot-hot{background:var(--accent)}.dot-warm{background:var(--warm)}.dot-cold{background:var(--ink-50)}
+.lead__body{flex:1;min-width:0}
+.lead__name{font-weight:600;font-size:.95rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.lead__tag{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-50);border:1px solid var(--line-2);padding:1px 6px;border-radius:99px}
+.lead__signal{font-size:.83rem;color:var(--ink-70);margin-top:2px}
+.lead__signal b{color:var(--ink)}
+.lead__action{flex-shrink:0}
+.sent{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:500;color:var(--green)}
+.sent svg{width:15px;height:15px}
+
+/* progress */
+.prog{margin-top:var(--s3)}
+.prog__top{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:var(--s2)}
+.prog__top b{font-family:var(--mono)}
+.prog__bar{height:8px;background:var(--paper-3);border-radius:99px;overflow:hidden}
+.prog__bar span{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .6s var(--ease)}
+
+/* filter chips */
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-bottom:var(--s5)}
+.chip{padding:.4rem .9rem;border-radius:99px;border:1px solid var(--line-2);background:var(--card);color:var(--ink-70);font-size:.85rem;font-weight:500;transition:.18s var(--ease)}
+.chip:hover{border-color:var(--ink)}
+.chip.is-active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* mini bar chart */
+.bars{display:flex;align-items:flex-end;gap:var(--s3);height:150px;margin-top:var(--s4)}
+.bars__col{flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--s2);height:100%;justify-content:flex-end}
+.bars__bar{width:100%;max-width:34px;background:var(--accent-tint);border-radius:var(--r-s) var(--r-s) 0 0;position:relative;transition:height .6s var(--ease)}
+.bars__bar::after{content:attr(data-v);position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.66rem;color:var(--ink-50)}
+.bars__bar.hot{background:var(--accent)}
+.bars__lbl{font-family:var(--mono);font-size:.62rem;color:var(--ink-50);text-transform:uppercase}
+
+/* account cards */
+.acc{display:flex;align-items:center;gap:var(--s4);padding:var(--s4);border:1px solid var(--line);border-radius:var(--r-m);background:var(--card);margin-bottom:var(--s3)}
+.acc__icon{width:40px;height:40px;border-radius:var(--r-s);background:var(--paper-2);display:grid;place-items:center;color:var(--accent);flex-shrink:0}
+.acc__b{flex:1}
+.acc__name{font-weight:600;font-size:.95rem}
+.acc__meta{font-size:.8rem;color:var(--ink-70)}
+.status{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;padding:3px 9px;border-radius:99px;display:inline-flex;align-items:center;gap:.4rem}
+.status::before{content:"";width:6px;height:6px;border-radius:50%}
+.status-ok{background:rgba(75,122,70,.12);color:var(--green)}.status-ok::before{background:var(--green)}
+.status-warm{background:rgba(200,146,46,.14);color:#8a6317}.status-warm::before{background:var(--warm)}
+
+/* offers */
+.offers{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--s4)}
+.offer{border:1px solid var(--line);border-radius:var(--r-m);padding:var(--s5);background:var(--card)}
+.offer__niche{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+.offer__title{font-family:var(--sans);font-weight:600;margin:var(--s2) 0 var(--s3)}
+.offer__text{font-size:.85rem;color:var(--ink-70);line-height:1.5}
+.offer__foot{margin-top:var(--s4);display:flex;align-items:center;justify-content:space-between}
+.offer__stat{font-size:.78rem;color:var(--ink-50)}
+
+/* settings */
+.set-row{display:grid;grid-template-columns:200px 1fr;gap:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--line)}
+.set-row:first-child{border-top:0}
+.set-row h4{font-family:var(--sans);font-weight:600;font-size:.95rem}
+.set-row p{font-size:.82rem;color:var(--ink-50);margin-top:var(--s1)}
+.pills{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.pill{padding:.5rem 1rem;border-radius:var(--r-s);border:1px solid var(--line-2);background:var(--card);color:var(--ink-70);font-size:.85rem;font-weight:500;transition:.18s var(--ease)}
+.pill:hover{border-color:var(--ink)}
+.pill.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:.8rem 1.3rem;border-radius:99px;font-size:.88rem;font-weight:500;display:flex;align-items:center;gap:.6rem;box-shadow:0 12px 30px -10px rgba(0,0,0,.4);opacity:0;visibility:hidden;transition:.4s var(--ease);z-index:100}
+.toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.toast svg{width:18px;height:18px;color:#7ec97a}
+
+/* mobile */
+.side__toggle{display:none}
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;z-index:50;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .3s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.15)}
+  .side.open{transform:none}
+  .side-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;visibility:hidden;transition:.3s;z-index:40}
+  .side-backdrop.show{opacity:1;visibility:visible}
+  .main{padding-top:var(--s5)}
+  .mtop{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s5)}
+  .side__toggle{display:grid;place-items:center;width:42px;height:42px;border:1px solid var(--line-2);border-radius:var(--r-s);background:var(--card)}
+  .stats{grid-template-columns:1fr 1fr}
+  .grid-2{grid-template-columns:1fr}
+  .set-row{grid-template-columns:1fr;gap:var(--s3)}
+}
+@media(min-width:861px){.mtop{display:none}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="side" id="side">
+    <a class="side__brand" href="#" data-nav="overview">
+      <svg class="side__logo" viewBox="0 0 100 100" fill="currentColor"><polygon points="50,5 68,35 50,95 32,35"/><polygon points="28,35 8,50 25,80 43,85"/><polygon points="72,35 92,50 75,80 57,85"/></svg>
+      <span><span class="side__name">Wareon</span><span class="side__by">ECOSYSTEM</span></span>
+    </a>
+    <nav class="side__nav">
+      <span class="side__label">Работа</span>
+      <button class="nav-item is-active" data-nav="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Обзор</button>
+      <button class="nav-item" data-nav="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Лиды <span class="nav-item__badge" id="leadBadge">12</span></button>
+      <button class="nav-item" data-nav="offers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.17L4 17.17V4z"/><path d="M8 9h8M8 12h5"/></svg> Офферы</button>
+      <button class="nav-item" data-nav="camp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg> Рассылки</button>
+      <span class="side__label">Ресурсы</span>
+      <button class="nav-item" data-nav="accounts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M7 4v5"/></svg> Аккаунты</button>
+      <button class="nav-item" data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.9 1.09V22a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 20.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3.6 15a1.65 1.65 0 0 0-1.09-.9H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.6 8.9a1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 6.04 4.2l.06.06A1.65 1.65 0 0 0 8 4.6h.05A1.65 1.65 0 0 0 9 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 14 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.4 9v.05c.2.61.76 1.03 1.4 1.05H22a2 2 0 0 1 0 4h-.09c-.64.02-1.2.44-1.51 1z"/></svg> Настройки</button>
+    </nav>
+    <div class="side__user">
+      <div class="side__avatar" id="avatar">Д</div>
+      <div class="side__uinfo"><div class="side__uname" id="uname">Дмитрий</div><div class="side__uplan">Тариф · Дизайн</div></div>
+      <button class="side__logout" id="logout" title="Выйти" aria-label="Выйти"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
+    </div>
+  </aside>
+  <div class="side-backdrop" id="backdrop"></div>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="mtop">
+      <button class="side__toggle" id="menuBtn" aria-label="Меню"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <a class="side__brand" style="padding:0" href="#"><span class="side__name">Wareon</span></a>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="section is-active" id="s-overview">
+      <div class="topbar">
+        <div>
+          <div class="topbar__kicker">Обзор</div>
+          <h1>С возвращением, Дмитрий</h1>
+          <p class="topbar__sub">За сегодня система нашла <b>12</b> новых лидов под твою нишу.</p>
+        </div>
+        <button class="btn" data-nav="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> Смотреть лиды</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat__label">Найдено лидов</div><div class="stat__val">128</div><div class="stat__delta">+12 сегодня</div></div>
+        <div class="stat"><div class="stat__label">Офферов отправлено</div><div class="stat__val">43</div><div class="stat__delta">+8 за неделю</div></div>
+        <div class="stat"><div class="stat__label">Ответов</div><div class="stat__val">17</div><div class="stat__delta">39% конверсия</div></div>
+        <div class="stat"><div class="stat__label">В работе</div><div class="stat__val">5</div><div class="stat__delta down">сделки на согласовании</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title">Свежие лиды</span><a class="panel__link" href="#" data-nav="leads">Все лиды →</a></div>
+          <div id="overviewLeads"></div>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title">Лимит на сегодня</span></div>
+          <div class="prog">
+            <div class="prog__top"><span>Отправлено сообщений</span><span><b>43</b> / 50</span></div>
+            <div class="prog__bar"><span style="width:86%"></span></div>
+          </div>
+          <p style="font-size:.82rem;color:var(--ink-70);margin-top:var(--s4);line-height:1.5">Рассылка идёт с <b>1 автономного аккаунта</b> — в безопасном темпе, без риска бана. Лимит обновится в 00:00.</p>
+          <div style="margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:.85rem;color:var(--ink-70)">Хочешь больше в день?</span>
+            <button class="btn btn--ghost btn--sm" data-nav="settings">Увеличить объём</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADS -->
+    <section class="section" id="s-leads">
+      <div class="topbar">
+        <div>
+          <div class="topbar__kicker">Лиды</div>
+          <h1>Найденные клиенты</h1>
+          <p class="topbar__sub">Бизнесы, которым прямо сейчас нужна твоя работа. Оффер под каждого уже готов.</p>
+        </div>
+        <button class="btn" id="findMore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лиды</button>
+      </div>
+      <div class="chips" id="leadChips">
+        <button class="chip is-active" data-f="all">Все</button>
+        <button class="chip" data-f="hot">🔥 Горячие</button>
+        <button class="chip" data-f="warm">Тёплые</button>
+        <button class="chip" data-f="cold">Холодные</button>
+      </div>
+      <div class="panel"><div id="leadList"></div></div>
+    </section>
+
+    <!-- OFFERS -->
+    <section class="section" id="s-offers">
+      <div class="topbar">
+        <div><div class="topbar__kicker">Офферы</div><h1>Шаблоны офферов</h1><p class="topbar__sub">Персональные заготовки под сигналы бизнеса. Wareon подставит детали автоматически.</p></div>
+      </div>
+      <div class="offers">
+        <div class="offer"><div class="offer__niche">Дизайн · WB</div><div class="offer__title">Мини-аудит карточки</div><p class="offer__text">«Заметил, что у товара нет инфографики, а конверсия ниже средней по нише. Сделал разбор — показать, где теряются продажи?»</p><div class="offer__foot"><span class="offer__stat">Открытий 71%</span><button class="btn btn--ghost btn--sm">Изменить</button></div></div>
+        <div class="offer"><div class="offer__niche">Дизайн · WB</div><div class="offer__title">Упущенная прибыль</div><p class="offer__text">«По моим расчётам, слабый визуал карточки стоит вам ~X заказов в месяц. Готов показать до/после на вашем товаре.»</p><div class="offer__foot"><span class="offer__stat">Открытий 64%</span><button class="btn btn--ghost btn--sm">Изменить</button></div></div>
+        <div class="offer"><div class="offer__niche">Общий</div><div class="offer__title">Быстрый первый контакт</div><p class="offer__text">«Здравствуйте! Работаю с брендами в вашей нише, есть идея по улучшению карточек. Скинуть пример за 2 минуты?»</p><div class="offer__foot"><span class="offer__stat">Открытий 58%</span><button class="btn btn--ghost btn--sm">Изменить</button></div></div>
+        <div class="offer" style="border-style:dashed;display:grid;place-items:center;text-align:center;min-height:180px"><div><div style="font-size:1.6rem;color:var(--accent)">+</div><div class="offer__title" style="margin:.4rem 0 0">Новый шаблон</div><p class="offer__text">Создай свой оффер под сигнал</p></div></div>
+      </div>
+    </section>
+
+    <!-- CAMPAIGNS -->
+    <section class="section" id="s-camp">
+      <div class="topbar"><div><div class="topbar__kicker">Рассылки</div><h1>Активность за неделю</h1><p class="topbar__sub">Отправка идёт автоматически в безопасном темпе.</p></div></div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title">Сообщения по дням</span><span class="offer__stat">за 7 дней</span></div>
+          <div class="bars">
+            <div class="bars__col"><div class="bars__bar" data-v="32" style="height:64%"></div><span class="bars__lbl">Пн</span></div>
+            <div class="bars__col"><div class="bars__bar" data-v="45" style="height:90%"></div><span class="bars__lbl">Вт</span></div>
+            <div class="bars__col"><div class="bars__bar" data-v="38" style="height:76%"></div><span class="bars__lbl">Ср</span></div>
+            <div class="bars__col"><div class="bars__bar" data-v="50" style="height:100%"></div><span class="bars__lbl">Чт</span></div>
+            <div class="bars__col"><div class="bars__bar" data-v="41" style="height:82%"></div><span class="bars__lbl">Пт</span></div>
+            <div class="bars__col"><div class="bars__bar" data-v="29" style="height:58%"></div><span class="bars__lbl">Сб</span></div>
+            <div class="bars__col"><div class="bars__bar hot" data-v="43" style="height:86%"></div><span class="bars__lbl">Вс</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><span class="panel__title">Итоги</span></div>
+          <div class="lead"><div class="lead__body"><div class="lead__name">Всего отправлено</div><div class="lead__signal">за последние 7 дней</div></div><div class="mono" style="font-size:1.3rem;font-weight:500">278</div></div>
+          <div class="lead"><div class="lead__body"><div class="lead__name">Доставлено</div><div class="lead__signal">без ошибок и банов</div></div><div class="mono" style="font-size:1.3rem;font-weight:500;color:var(--green)">98%</div></div>
+          <div class="lead"><div class="lead__body"><div class="lead__name">Ответили</div><div class="lead__signal">начали диалог</div></div><div class="mono" style="font-size:1.3rem;font-weight:500;color:var(--accent)">17</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCOUNTS -->
+    <section class="section" id="s-accounts">
+      <div class="topbar"><div><div class="topbar__kicker">Аккаунты</div><h1>Автономные аккаунты</h1><p class="topbar__sub">Прогретые аккаунты, с которых идёт безопасная рассылка.</p></div><button class="btn" data-nav="settings">+ Добавить аккаунт</button></div>
+      <div class="acc"><div class="acc__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.66a1.3 1.3 0 0 0-1.32-.2L3.3 11.2c-.9.36-.88 1.65.03 1.97l4.3 1.5 1.66 5.05c.2.6.95.78 1.4.33l2.4-2.36 4.27 3.13c.5.37 1.2.1 1.34-.5l3.2-14.4a1.3 1.3 0 0 0-.66-1.36Z"/></svg></div><div class="acc__b"><div class="acc__name">Telegram · аккаунт #1</div><div class="acc__meta">Отправлено сегодня: 43 / 50</div></div><span class="status status-ok">работает</span></div>
+      <div class="acc"><div class="acc__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.66a1.3 1.3 0 0 0-1.32-.2L3.3 11.2c-.9.36-.88 1.65.03 1.97l4.3 1.5 1.66 5.05c.2.6.95.78 1.4.33l2.4-2.36 4.27 3.13c.5.37 1.2.1 1.34-.5l3.2-14.4a1.3 1.3 0 0 0-.66-1.36Z"/></svg></div><div class="acc__b"><div class="acc__name">Telegram · аккаунт #2</div><div class="acc__meta">Прогрев · будет готов через 2 дня</div></div><span class="status status-warm">прогрев</span></div>
+      <div class="acc" style="border-style:dashed;justify-content:center;color:var(--ink-50);font-size:.9rem">Добавь аккаунт, чтобы увеличить дневной объём рассылок</div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="section" id="s-settings">
+      <div class="topbar"><div><div class="topbar__kicker">Настройки</div><h1>Конфигурация поиска</h1><p class="topbar__sub">Под эти параметры Wareon подстраивает поиск, сигналы и офферы.</p></div><button class="btn" id="saveSettings">Сохранить</button></div>
+      <div class="panel">
+        <div class="set-row"><div><h4>Твоя ниша</h4><p>Определяет алгоритм поиска</p></div><div class="pills" data-single><button class="pill on">Дизайн</button><button class="pill">Копирайтинг</button><button class="pill">Фото</button><button class="pill">Продюсеры</button><button class="pill">Таргет</button><button class="pill">SMM</button></div></div>
+        <div class="set-row"><div><h4>Площадки</h4><p>Где искать клиентов</p></div><div class="pills"><button class="pill on">Telegram</button><button class="pill on">Wildberries</button><button class="pill">Ozon</button><button class="pill">Instagram</button></div></div>
+        <div class="set-row"><div><h4>Объём в день</h4><p>Сообщений на аккаунт</p></div><div style="width:100%;max-width:420px"><div class="prog__top"><span>Сообщений в день</span><span class="mono" id="volVal">50</span></div><input type="range" id="vol" min="50" max="500" step="50" value="50" style="width:100%;accent-color:var(--accent)"></div></div>
+        <div class="set-row"><div><h4>Тариф</h4><p>Текущая подписка</p></div><div><div style="font-family:var(--serif);font-size:1.5rem">990 ₽ <span style="font-family:var(--sans);font-size:.9rem;color:var(--ink-70)">/ месяц</span></div><div style="font-size:.82rem;color:var(--ink-50);margin-top:2px">Активна до 5 августа · автопродление выкл.</div></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg">Готово</span></div>
+
+<script>
+(function(){
+  const qs=(s,e=document)=>e.querySelector(s), qsa=(s,e=document)=>Array.from(e.querySelectorAll(s));
+
+  /* toast */
+  let toastT;
+  const toast=(msg)=>{const t=qs('#toast');qs('#toastMsg').textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);};
+
+  /* personalize from ?name= or stored (fallback Дмитрий) */
+  try{const p=new URLSearchParams(location.search).get('name');if(p){qs('#uname').textContent=p;qs('#avatar').textContent=p[0].toUpperCase();qsa('h1').forEach(h=>{if(h.textContent.includes('Дмитрий'))h.textContent=h.textContent.replace('Дмитрий',p);});}}catch(e){}
+
+  /* welcome toast */
+  setTimeout(()=>toast('Аккаунт создан — доступ открыт'),600);
+
+  /* nav switching */
+  const sections={overview:'s-overview',leads:'s-leads',offers:'s-offers',camp:'s-camp',accounts:'s-accounts',settings:'s-settings'};
+  const go=(key)=>{
+    if(!sections[key])return;
+    qsa('.section').forEach(s=>s.classList.remove('is-active'));
+    qs('#'+sections[key]).classList.add('is-active');
+    qsa('.nav-item').forEach(n=>n.classList.toggle('is-active',n.dataset.nav===key));
+    window.scrollTo({top:0,behavior:'smooth'});
+    closeSide();
+  };
+  qsa('[data-nav]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();go(el.dataset.nav);}));
+
+  /* mobile sidebar */
+  const side=qs('#side'),bd=qs('#backdrop');
+  const closeSide=()=>{side.classList.remove('open');bd.classList.remove('show');};
+  qs('#menuBtn').addEventListener('click',()=>{side.classList.add('open');bd.classList.add('show');});
+  bd.addEventListener('click',closeSide);
+
+  /* leads data */
+  const POOL=[
+    {t:'hot',name:'Селлер WB',tag:'Одежда',sig:'Инфографика карточек · конверсия <b>0.8%</b>'},
+    {t:'hot',name:'Магазин Ozon',tag:'Косметика',sig:'12 товаров · <b>фото без обработки</b>'},
+    {t:'warm',name:'Бренд посуды',tag:'WB',sig:'Растут продажи · <b>устаревший дизайн</b>'},
+    {t:'hot',name:'Селлер WB',tag:'Детское',sig:'Новая карточка · <b>нет инфографики</b>'},
+    {t:'cold',name:'Локальная кофейня',tag:'Instagram',sig:'Последний пост · <b>3 нед. назад</b>'},
+    {t:'warm',name:'Селлер Ozon',tag:'Товары для дома',sig:'Конверсия <b>1.4%</b> · слабое главное фото'},
+    {t:'hot',name:'Магазин WB',tag:'Электроника',sig:'Топ выдачи · <b>карточка без рич-контента</b>'},
+    {t:'cold',name:'Барбершоп',tag:'Локальный',sig:'Оформление профиля · <b>устарело</b>'},
+  ];
+  let leadN=0, sent=0, filter='all';
+  const leadList=qs('#leadList'), ovLeads=qs('#overviewLeads'), badge=qs('#leadBadge');
+
+  const leadRow=(l,idx)=>{
+    const dot=l.t==='hot'?'dot-hot':l.t==='warm'?'dot-warm':'dot-cold';
+    return `<div class="lead" data-t="${l.t}">
+      <span class="lead__dot ${dot}"></span>
+      <div class="lead__body">
+        <div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div>
+        <div class="lead__signal">${l.sig}</div>
+      </div>
+      <div class="lead__action">
+        <button class="btn btn--sm js-send" data-idx="${idx}">Отправить оффер</button>
+      </div></div>`;
+  };
+
+  const renderLeads=()=>{
+    const items=POOL.slice(0,leadN);
+    leadList.innerHTML = items.map((l,i)=>leadRow(l,i)).join('') || '<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лиды».</p>';
+    applyFilter();
+    bindSend();
+  };
+  const applyFilter=()=>{
+    qsa('.lead',leadList).forEach(r=>{r.style.display=(filter==='all'||r.dataset.t===filter)?'':'none';});
+  };
+  const bindSend=()=>{
+    qsa('.js-send',leadList).forEach(b=>b.addEventListener('click',()=>{
+      const row=b.closest('.lead__action');
+      row.innerHTML='<span class="sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Отправлено</span>';
+      sent++; toast('Оффер отправлен · '+sent+' сегодня');
+    }));
+  };
+
+  /* overview mini leads (static 3) */
+  ovLeads.innerHTML = POOL.slice(0,3).map((l,i)=>{
+    const dot=l.t==='hot'?'dot-hot':l.t==='warm'?'dot-warm':'dot-cold';
+    return `<div class="lead"><span class="lead__dot ${dot}"></span><div class="lead__body"><div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div><div class="lead__signal">${l.sig}</div></div><div class="lead__action"><span class="lead__tag">Оффер готов</span></div></div>`;
+  }).join('');
+
+  /* find more */
+  const findBtn=qs('#findMore');
+  const findMore=()=>{
+    const add=Math.min(4,POOL.length-leadN);
+    if(add<=0){toast('Больше лидов на сегодня нет');return;}
+    findBtn.textContent='Ищем…';findBtn.style.opacity=.6;
+    setTimeout(()=>{leadN+=add;badge.textContent=leadN;renderLeads();findBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лиды';findBtn.style.opacity=1;toast('Найдено +'+add+' лида');},900);
+  };
+  findBtn.addEventListener('click',findMore);
+  qs('#leadChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;qsa('.chip').forEach(x=>x.classList.remove('is-active'));c.classList.add('is-active');filter=c.dataset.f;applyFilter();});
+
+  leadN=Math.min(4,POOL.length); badge.textContent=12; renderLeads();
+
+  /* settings interactions */
+  qsa('.pills').forEach(group=>{
+    const single=group.hasAttribute('data-single');
+    group.addEventListener('click',e=>{const p=e.target.closest('.pill');if(!p)return;if(single){qsa('.pill',group).forEach(x=>x.classList.remove('on'));p.classList.add('on');}else{p.classList.toggle('on');}});
+  });
+  const vol=qs('#vol'); if(vol)vol.addEventListener('input',()=>qs('#volVal').textContent=vol.value);
+  const saveBtn=qs('#saveSettings'); if(saveBtn)saveBtn.addEventListener('click',()=>toast('Настройки сохранены'));
+
+  /* logout -> back to landing (works locally, Pages, htmlpreview) */
+  qs('#logout').addEventListener('click',()=>{
+    const h=location.href;
+    if(h.includes('htmlpreview.github.io')){location.href=h.replace('dashboard.html','index-lite.html');}
+    else{location.href='index.html';}
+  });
+})();
+</script>
+</body>
+</html>

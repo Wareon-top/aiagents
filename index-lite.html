@@ -1022,6 +1022,16 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 
 <script>
 (function () {
+  /* ---- 0. Navigation helper (works locally, on Pages, and via htmlpreview) ---- */
+  const navTo = (page) => {
+    const h = location.href;
+    if (h.includes('htmlpreview.github.io')) {
+      location.href = h.replace(/index(?:-lite)?\.html/, page);
+    } else {
+      location.href = page;
+    }
+  };
+
   /* ---- 1. Scroll reveal ---- */
   const hero = document.querySelector('.hero');
   const io = new IntersectionObserver((entries) => {
@@ -1113,7 +1123,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     const fakeAuth = (btn, loadingText) => {
       if (authPending) return; authPending = true;
       btn.classList.add('is-loading'); btn.style.pointerEvents = 'none'; btn.textContent = loadingText;
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+      setTimeout(() => { navTo('dashboard.html'); }, 1200);
     };
     if (tgBtn) tgBtn.addEventListener('click', () => fakeAuth(tgBtn, 'Вход…'));
     if (form) form.addEventListener('submit', (e) => { e.preventDefault(); fakeAuth(form.querySelector('button[type="submit"]'), isLogin ? 'Вход…' : 'Создаём…'); });
@@ -1195,7 +1205,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       calcPending = true;
       cta.classList.add('is-loading'); cta.style.pointerEvents = 'none';
       cta.textContent = 'Создаём аккаунт…';
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+      setTimeout(() => { navTo('dashboard.html'); }, 1200);
     });
   }
 })();
