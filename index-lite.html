@@ -7,7 +7,7 @@
 <meta name="description" content="Wareon анализирует тысячи бизнесов, находит тех, кому нужна твоя работа, и выдаёт готовые контакты с персональным оффером. От регистрации до первого клиента — 10 минут.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Onest:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
 <style>
-/* Google Fonts via <head> link */
+/* GF */
 
 /* ============================================================
    WAREON ECOSYSTEM — Editorial redesign
@@ -202,7 +202,12 @@ p{ text-wrap:pretty; }
 .header__actions{ display:flex; align-items:center; gap:var(--s5); }
 .header__login{ font-size:var(--fs-sm); color:var(--ink-70); transition:color var(--t1) var(--ease); }
 .header__login:hover{ color:var(--ink); }
-.nav-toggle{ display:none; }
+.nav-toggle{ display:none; width:40px; height:40px; flex-direction:column; justify-content:center; align-items:center; gap:5px; }
+.nav-toggle span{ display:block; width:22px; height:2px; background:var(--ink); border-radius:2px; transition:transform .3s var(--ease), opacity .2s var(--ease); }
+.site-header.is-open .nav-toggle span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.site-header.is-open .nav-toggle span:nth-child(2){ opacity:0; }
+.site-header.is-open .nav-toggle span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+.mobile-menu{ display:none; }
 
 /* ============================================================
    HERO
@@ -270,8 +275,9 @@ p{ text-wrap:pretty; }
 /* ============================================================
    PAIN
    ============================================================ */
-.pain__head{ display:grid; grid-template-columns:1.3fr 0.7fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:center; }
-.ratio{ align-self:center; }
+.pain__head{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:clamp(2rem,1rem + 4vw,4.5rem); }
+.pain__head .sec-head{ flex:0 1 auto; }
+.ratio{ flex:0 1 360px; align-self:flex-end; padding-bottom:var(--s2); }
 .ratio__row{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--s2); }
 .ratio__row:not(:first-child){ margin-top:var(--s5); }
 .ratio__k{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-50); }
@@ -371,6 +377,10 @@ p{ text-wrap:pretty; }
 /* ============================================================
    HOW
    ============================================================ */
+.how__head{ display:grid; grid-template-columns:1.4fr 0.6fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:end; }
+.how__head .sec-head{ max-width:none; }
+.how__intro p{ color:var(--ink-70); font-size:var(--fs-body-lg); max-width:42ch; }
+.how__intro-note{ display:inline-block; margin-top:var(--s4); font-family:var(--mono); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-50); }
 .how__steps{ margin-top:var(--s8); display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
 .step{ padding-top:var(--s5); padding-right:var(--s6); border-top:2px solid var(--ink); }
 .step:not(:last-child){ margin-right:var(--s6); }
@@ -452,8 +462,18 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 /* ============================================================
    FOOTER
    ============================================================ */
+/* ---- closing CTA band ---- */
+.cta-band__inner{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:end; padding:clamp(2.25rem,1.5rem + 4vw,4.5rem); background:var(--ink); border-radius:var(--radius-l); }
+.cta-band__text h2{ margin-top:var(--s4); color:var(--paper); }
+.cta-band__text .kicker{ color:rgba(252,246,239,.55); }
+.cta-band__text .kicker::before{ background:rgba(252,246,239,.3); }
+.cta-band__text .accent{ color:#E3895A; }
+.cta-band__side{ display:flex; flex-direction:column; align-items:flex-start; gap:var(--s4); }
+.cta-band__side .btn{ padding:1rem 1.9rem; font-size:var(--fs-body); }
+.cta-band__note{ font-family:var(--mono); font-size:var(--fs-xs); color:rgba(252,246,239,.5); letter-spacing:0.02em; line-height:1.5; }
+
 .site-footer{ border-top:1px solid var(--line); padding-block:var(--s8) var(--s6); }
-.footer__grid{ display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:var(--s6); }
+.footer__grid{ display:grid; grid-template-columns:1.6fr 1fr 1.2fr 1.1fr; gap:var(--s6); }
 .footer__brand p{ margin-top:var(--s4); font-size:var(--fs-sm); color:var(--ink-70); max-width:32ch; }
 .footer__col h5{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); font-weight:500; margin-bottom:var(--s4); }
 .footer__col a{ display:block; font-size:var(--fs-sm); color:var(--ink-70); padding:.3rem 0; transition:color var(--t1) var(--ease); }
@@ -486,12 +506,22 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 .auth-form .btn{ width:100%; margin-top:var(--s2); }
 .auth-switch{ margin-top:var(--s5); text-align:center; font-size:var(--fs-sm); color:var(--ink-70); }
 .auth-switch button{ color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
+.auth-legal{ margin-top:var(--s4); text-align:center; font-size:var(--fs-xs); color:var(--ink-50); line-height:1.5; }
+.auth-legal a{ color:var(--ink-70); text-decoration:underline; text-underline-offset:2px; }
+.auth-legal a:hover{ color:var(--accent); }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width:900px){
   .site-nav, .header__login{ display:none; }
+  .nav-toggle{ display:flex; }
+  .mobile-menu{ display:flex; flex-direction:column; overflow:hidden; max-height:0; opacity:0; padding-inline:var(--pad); background:var(--paper); transition:max-height .35s var(--ease), opacity .25s var(--ease), padding .35s var(--ease); }
+  .site-header.is-open .mobile-menu{ max-height:380px; opacity:1; padding-block:var(--s3) var(--s5); border-top:1px solid var(--line); }
+  .mobile-menu a{ font-size:1.05rem; color:var(--ink-70); padding:.7rem 0; }
+  .mobile-menu a:hover{ color:var(--ink); }
+  .mobile-menu__login{ border-bottom:1px solid var(--line); margin-bottom:var(--s2); }
+  .mobile-menu .btn{ justify-content:center; margin-top:var(--s3); }
   .hero__grid{ grid-template-columns:1fr; gap:var(--s6); }
   .hero__visual{ order:2; max-width:440px; }
   .hero__cards{ margin-top:var(--s2); padding-inline:0; }
@@ -512,9 +542,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
   .niche-tab.is-active::before{ transform:scaleX(1); }
   .niche-tab:hover{ padding-left:var(--s5); }
   .niche-tab .idx{ display:none; }
+  .how__head{ grid-template-columns:1fr; gap:var(--s5); }
   .how__steps{ grid-template-columns:1fr; gap:var(--s6); }
   .step{ margin-right:0 !important; padding-right:0; }
   .pricing__layout{ grid-template-columns:1fr; }
+  .cta-band__inner{ grid-template-columns:1fr; align-items:start; gap:var(--s6); }
   .footer__grid{ grid-template-columns:1fr 1fr; }
   .footer__brand{ grid-column:1 / -1; }
 }
@@ -553,8 +585,18 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     <div class="header__actions">
       <a href="#" class="header__login js-auth-trigger">Войти</a>
       <a href="#pricing" class="btn btn--accent btn--sm js-auth-trigger">Попробовать</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Меню" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильная навигация">
+    <a href="#niches">Специализации</a>
+    <a href="#how">Как это работает</a>
+    <a href="#pricing">Стоимость</a>
+    <a href="#" class="mobile-menu__login js-auth-trigger">Войти</a>
+    <a href="#pricing" class="btn btn--accent js-auth-trigger">Попробовать бесплатно</a>
+  </nav>
 </header>
 
 <main>
@@ -844,9 +886,15 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 
   <!-- ============ HOW ============ -->
   <section class="how section container" id="how">
-    <div class="sec-head reveal">
-      <span class="kicker">Как это работает</span>
-      <h2>От регистрации до первого клиента — <span class="serif-i accent">10 минут.</span></h2>
+    <div class="how__head reveal">
+      <div class="sec-head">
+        <span class="kicker">Как это работает</span>
+        <h2>От регистрации до первого клиента — <span class="serif-i accent">10 минут.</span></h2>
+      </div>
+      <div class="how__intro">
+        <p>Три шага — и первый оффер уже готов к отправке. Ни воронок, ни парсеров, ни таблиц: поиск клиентов Wareon берёт на себя.</p>
+        <span class="how__intro-note">Без настройки · работает из коробки</span>
+      </div>
     </div>
     <div class="how__steps">
       <div class="step reveal" style="--d:.05s">
@@ -949,6 +997,20 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     </div>
   </section>
 
+  <!-- ============ CLOSING CTA ============ -->
+  <section class="cta-band section container">
+    <div class="cta-band__inner reveal">
+      <div class="cta-band__text">
+        <span class="kicker">Пора начать</span>
+        <h2>Хватит искать клиентов.<br>Начни <span class="serif-i accent">выбирать.</span></h2>
+      </div>
+      <div class="cta-band__side">
+        <a href="#pricing" class="btn btn--accent js-auth-trigger">Попробовать бесплатно</a>
+        <span class="cta-band__note">Первый клиент — за 10 минут · отмена в любой момент</span>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- ============ FOOTER ============ -->
@@ -974,7 +1036,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <h5>Правовое</h5>
         <a href="legal.html#offer">Публичная оферта</a>
         <a href="legal.html#privacy">Политика конфиденциальности</a>
-        <a href="https://t.me/wareon_support" target="_blank" rel="noopener">Поддержка</a>
+      </div>
+      <div class="footer__col">
+        <h5>Связь</h5>
+        <a href="https://t.me/wareon_support" target="_blank" rel="noopener">Telegram-поддержка</a>
+        <a href="mailto:hello@wareon.io">hello@wareon.io</a>
       </div>
     </div>
     <div class="footer__bottom">
@@ -1017,6 +1083,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       <span id="authSwitchText">Нет аккаунта?</span>
       <button type="button" id="authSwitch">Создать</button>
     </p>
+    <p class="auth-legal">Продолжая, ты принимаешь <a href="legal.html#offer">оферту</a> и <a href="legal.html#privacy">политику конфиденциальности</a>.</p>
   </div>
 </div>
 
@@ -1031,6 +1098,31 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       location.href = page;
     }
   };
+
+  /* ---- 0a. Legal links: keep working via htmlpreview ---- */
+  if (location.href.includes('htmlpreview.github.io')) {
+    document.querySelectorAll('a[href^="legal.html"]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const hash = (a.getAttribute('href').split('#')[1] || '');
+        location.href = location.href.replace(/index(?:-lite)?\.html/, 'legal.html') + (hash ? '#' + hash : '');
+      });
+    });
+  }
+
+  /* ---- 0b. Mobile menu ---- */
+  const header = document.querySelector('.site-header');
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (navToggle && header && mobileMenu) {
+    const closeMenu = () => { header.classList.remove('is-open'); navToggle.setAttribute('aria-expanded', 'false'); };
+    navToggle.addEventListener('click', () => {
+      const open = header.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+    window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); });
+  }
 
   /* ---- 1. Scroll reveal ---- */
   const hero = document.querySelector('.hero');
