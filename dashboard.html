@@ -77,6 +77,20 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-he
 .section.is-active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
+/* onboarding welcome */
+.welcome{position:relative;background:var(--ink);color:var(--paper);border-radius:var(--r-l);padding:clamp(1.5rem,1rem + 2vw,2.25rem);margin-bottom:var(--s6);animation:fade .4s var(--ease)}
+.welcome[hidden]{display:none}
+.welcome .kicker{color:rgba(252,246,239,.55)}
+.welcome h2{color:var(--paper);font-size:clamp(1.5rem,1.2rem + 1vw,2rem);margin-top:var(--s2)}
+.welcome__steps{list-style:none;margin-top:var(--s4);display:grid;gap:var(--s3);max-width:60ch}
+.welcome__steps li{display:flex;align-items:center;gap:var(--s3);color:rgba(252,246,239,.85);font-size:.95rem}
+.welcome__n{flex-shrink:0;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--on-accent);font-family:var(--mono);font-size:.72rem;font-weight:500}
+.welcome__actions{display:flex;gap:var(--s3);margin-top:var(--s5);flex-wrap:wrap}
+.welcome__actions .btn--ghost{color:var(--paper);border-color:rgba(252,246,239,.3);box-shadow:0 3px 0 rgba(0,0,0,.3);background:transparent}
+.welcome__actions .btn--ghost:hover{background:rgba(252,246,239,.08)}
+.welcome__close{position:absolute;top:var(--s4);right:var(--s4);width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:rgba(252,246,239,.6)}
+.welcome__close:hover{background:rgba(252,246,239,.12);color:var(--paper)}
+
 /* stat tiles */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s4);margin-bottom:var(--s6)}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--s5)}
@@ -258,6 +272,22 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
 
     <!-- OVERVIEW -->
     <section class="section is-active" id="s-overview">
+      <div class="welcome" id="welcome" hidden>
+        <button class="welcome__close" id="welcomeClose" aria-label="Закрыть">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>
+        <span class="kicker">Добро пожаловать</span>
+        <h2>Аккаунт готов. Осталось три шага.</h2>
+        <ol class="welcome__steps">
+          <li><span class="welcome__n">1</span> Проверь нишу и площадки в «Настройках».</li>
+          <li><span class="welcome__n">2</span> Открой «Лиды» — система уже нашла первых клиентов.</li>
+          <li><span class="welcome__n">3</span> Отправь готовый оффер в один клик.</li>
+        </ol>
+        <div class="welcome__actions">
+          <button class="btn" data-nav="leads" id="welcomeGo">Смотреть лидов</button>
+          <button class="btn btn--ghost btn--sm" id="welcomeSkip">Позже</button>
+        </div>
+      </div>
       <div class="topbar">
         <div>
           <div class="topbar__kicker">Обзор</div>
@@ -447,8 +477,16 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   /* personalize from ?name= or stored (fallback Дмитрий) */
   try{const p=new URLSearchParams(location.search).get('name');if(p){qs('#uname').textContent=p;qs('#avatar').textContent=p[0].toUpperCase();qsa('h1').forEach(h=>{if(h.textContent.includes('Дмитрий'))h.textContent=h.textContent.replace('Дмитрий',p);});}}catch(e){}
 
-  /* welcome toast */
-  setTimeout(()=>toast('Аккаунт создан — доступ открыт'),600);
+  /* onboarding — show once (first visit) */
+  const welcome=qs('#welcome');
+  if(welcome){
+    const dismiss=()=>{welcome.hidden=true;try{localStorage.setItem('wareon_onboarded','1');}catch(e){}};
+    let onboarded=false; try{onboarded=!!localStorage.getItem('wareon_onboarded');}catch(e){}
+    if(!onboarded){ welcome.hidden=false; setTimeout(()=>toast('Аккаунт создан — доступ открыт'),600); }
+    qs('#welcomeClose').addEventListener('click',dismiss);
+    qs('#welcomeSkip').addEventListener('click',dismiss);
+    qs('#welcomeGo').addEventListener('click',dismiss);
+  }
 
   /* nav switching */
   const sections={overview:'s-overview',leads:'s-leads',offers:'s-offers',camp:'s-camp',accounts:'s-accounts',settings:'s-settings'};
@@ -501,6 +539,14 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     {t:'warm',name:'Бренд посуды',tag:'WB',sig:'Растут продажи · <b>устаревший дизайн</b>',sent:false},
     {t:'hot',name:'Селлер WB',tag:'Детское',sig:'Новая карточка · <b>нет инфографики</b>',sent:false},
   ];
+  /* ---------- persistence (localStorage) ---------- */
+  const KEY='wareon_dash_v1';
+  const readOffers=()=>qsa('#offersGrid .offer:not(.offer--new)').map(o=>({niche:o.querySelector('.offer__niche').textContent,title:o.querySelector('.offer__title').textContent,text:o.querySelector('.offer__text').textContent,stat:o.querySelector('.offer__stat').textContent}));
+  const readCalc=()=>{const list=qsa('#calcNiches .pill');const per=qsa('.calc__period');const r=qs('#calcRange');return{nicheIdx:list.indexOf(qs('#calcNiches .pill.is-active')),platforms:qsa('#calcPlatforms .pill.is-active').map(p=>p.dataset.platform),volume:r?r.value:'50',periodIdx:per.indexOf(qs('.calc__period.is-active'))};};
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({S,foundToday,leads,offers:readOffers(),calc:readCalc()}));}catch(e){}};
+  let saved=null; try{saved=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){saved=null;}
+  if(saved){ if(saved.S)Object.assign(S,saved.S); if(typeof saved.foundToday==='number')foundToday=saved.foundToday; if(Array.isArray(saved.leads)&&saved.leads.length)leads=saved.leads; }
+
   let filter='all';
   const leadList=qs('#leadList'), ovLeads=qs('#overviewLeads');
   const dotOf=(t)=>t==='hot'?'dot-hot':t==='warm'?'dot-warm':'dot-cold';
@@ -516,7 +562,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     if(!leads[i]||leads[i].sent)return;
     if(S.dailySent>=S.dailyLimit){toast('Дневной лимит исчерпан — увеличь объём в «Настройках»');return;}
     leads[i].sent=true; S.sent++; S.dailySent++; S.open=Math.max(0,S.open-1);
-    renderLeads(); renderOverview();
+    renderLeads(); renderOverview(); save();
     toast('Оффер отправлен · '+S.sent+' всего');
   };
   leadList.addEventListener('click',e=>{const b=e.target.closest('.js-send');if(b)sendOffer(parseInt(b.dataset.i,10));});
@@ -529,7 +575,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
       const k=3+Math.floor(Math.random()*3);
       for(let j=0;j<k;j++)leads.unshift(genLead());
       S.found+=k; foundToday+=k; S.open+=k;
-      renderLeads(); renderOverview();
+      renderLeads(); renderOverview(); save();
       findBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Найти ещё лидов';
       findBtn.style.opacity=1; findBtn.dataset.busy='';
       toast('Найдено +'+k+' '+pluralLead(k));
@@ -558,8 +604,14 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     if(!title){offerTitleIn.focus();return;}
     if(editingCard){ editingCard.querySelector('.offer__title').textContent=title; editingCard.querySelector('.offer__text').textContent=text; toast('Оффер обновлён'); }
     else{ const d=document.createElement('div'); d.className='offer'; d.innerHTML='<div class="offer__niche">'+esc(S.niche)+'</div><div class="offer__title">'+esc(title)+'</div><p class="offer__text">'+esc(text)+'</p><div class="offer__foot"><span class="offer__stat">Новый</span><button class="btn btn--ghost btn--sm js-offer-edit">Изменить</button></div>'; offerGrid.insertBefore(d,offerNewBtn); toast('Шаблон создан'); }
-    closeOffer();
+    save(); closeOffer();
   });
+
+  /* rebuild offers from saved state */
+  if(saved && Array.isArray(saved.offers) && saved.offers.length){
+    qsa('#offersGrid .offer:not(.offer--new)').forEach(o=>o.remove());
+    saved.offers.forEach(o=>{ const d=document.createElement('div'); d.className='offer'; d.innerHTML='<div class="offer__niche">'+esc(o.niche||'')+'</div><div class="offer__title">'+esc(o.title||'')+'</div><p class="offer__text">'+esc(o.text||'')+'</p><div class="offer__foot"><span class="offer__stat">'+esc(o.stat||'Шаблон')+'</span><button class="btn btn--ghost btn--sm js-offer-edit">Изменить</button></div>'; offerGrid.insertBefore(d,offerNewBtn); });
+  }
 
   /* settings = full calculator ported from the landing */
   const range=qs('#calcRange');
@@ -595,13 +647,23 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     range.addEventListener('input',render);
     periods.forEach(p=>p.addEventListener('click',()=>{periods.forEach(x=>x.classList.remove('is-active'));p.classList.add('is-active');mult=parseFloat(p.dataset.mult);discount=parseFloat(p.dataset.discount);render();}));
     syncPlatforms();render();
+    /* restore calc from saved state */
+    if(saved && saved.calc){
+      const c=saved.calc;
+      if(typeof c.nicheIdx==='number'&&niches[c.nicheIdx]){niches.forEach(x=>x.classList.remove('is-active'));niches[c.nicheIdx].classList.add('is-active');}
+      if(c.volume)range.value=c.volume;
+      if(typeof c.periodIdx==='number'&&periods[c.periodIdx]){periods.forEach(x=>x.classList.remove('is-active'));periods[c.periodIdx].classList.add('is-active');mult=parseFloat(periods[c.periodIdx].dataset.mult);discount=parseFloat(periods[c.periodIdx].dataset.discount);}
+      syncPlatforms();
+      if(Array.isArray(c.platforms)){platforms.forEach(p=>{if(p.dataset.platform==='tg')return;if(c.platforms.indexOf(p.dataset.platform)>-1&&!p.classList.contains('is-locked'))p.classList.add('is-active');else p.classList.remove('is-active');});}
+      render();
+    }
     let pending=false;
     cta.addEventListener('click',()=>{if(pending||cta.disabled)return;pending=true;cta.classList.add('is-loading');cta.textContent='Обновляем…';
       setTimeout(()=>{
         const activeNiche=niches.find(n=>n.classList.contains('is-active'));
         if(activeNiche)S.niche=activeNiche.textContent.trim();
         S.dailyLimit=parseInt(range.value,10);
-        renderOverview();
+        renderOverview(); save();
         cta.classList.remove('is-loading');cta.textContent='Обновить конфигурацию';pending=false;
         toast('Конфигурация обновлена');
       },900);
