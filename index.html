@@ -370,12 +370,17 @@ p{ text-wrap:pretty; }
 /* niche icon — inline with the title */
 .niche-panel__icon{ width:28px; height:28px; flex-shrink:0; color:var(--accent); }
 
-/* right column — framed pull-quote card, content centred so no empty gap */
-.np__aside{ position:relative; display:flex; flex-direction:column; justify-content:center; padding:clamp(1.5rem,1rem + 2vw,2.25rem); background:var(--paper-2); border:1px solid var(--line-2); border-radius:var(--radius-l); }
-.np__aside-label{ display:block; margin-bottom:var(--s4); font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
+/* right column — editorial pull-quote callout: pain up top, resolution at bottom */
+.np__aside{ position:relative; display:flex; flex-direction:column; justify-content:space-between; gap:var(--s5); padding:clamp(1.5rem,1rem + 2vw,2.25rem); background:var(--paper-2); border:1px solid var(--line-2); border-left:3px solid var(--accent); border-radius:var(--radius-l); overflow:hidden; }
+.np__aside::before{ content:"“"; position:absolute; top:-2.2rem; right:.6rem; font-family:var(--serif); font-weight:600; font-size:8rem; line-height:1; color:var(--accent); opacity:.1; pointer-events:none; }
+.np__aside-top{ position:relative; }
+.np__aside-label{ display:block; font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-50); }
 .niche-panel__pain{
+  margin-top:var(--s4);
   font-family:var(--serif); font-style:normal; font-weight:500; font-size:var(--fs-h4); line-height:1.42; color:var(--ink); text-wrap:pretty;
 }
+.np__aside-foot{ display:flex; align-items:baseline; gap:var(--s3); padding-top:var(--s4); border-top:1px solid var(--line-2); font-size:var(--fs-sm); font-weight:500; color:var(--ink); line-height:1.45; }
+.np__aside-arrow{ color:var(--accent); font-weight:700; flex-shrink:0; }
 
 /* ============================================================
    HOW
@@ -390,8 +395,12 @@ p{ text-wrap:pretty; }
 /* ============================================================
    PRICING — calculator as a refined instrument
    ============================================================ */
-.pricing__layout{ margin-top:var(--s8); display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:start; }
+.pricing__layout{ margin-top:var(--s8); display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:stretch; }
+.pricing__aside{ display:flex; flex-direction:column; }
 .pricing__aside .kicker{ margin-bottom:var(--s4); }
+.pricing__trust{ margin-top:auto; display:flex; align-items:flex-start; gap:var(--s4); padding:var(--s5); background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius-m); }
+.pricing__trust svg{ width:26px; height:26px; flex-shrink:0; color:var(--accent); margin-top:2px; }
+.pricing__trust span{ font-size:var(--fs-sm); color:var(--ink-70); line-height:1.5; }
 .pricing__aside h2{ font-size:clamp(2.25rem,1.4rem + 3.4vw,3.5rem); max-width:16ch; }
 .advantages{ margin-top:var(--s8); display:grid; gap:var(--s8); padding-left:var(--s6); border-left:2px solid var(--line-2); }
 .advantages li{ position:relative; display:flex; gap:var(--s5); }
@@ -694,8 +703,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти селлеров</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">Писать селлерам в холодную — это собирать отказы. 99% не понимают, зачем менять дизайн, если «и так покупают».</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">Писать селлерам в холодную — это собирать отказы. 99% не понимают, зачем менять дизайн, если «и так покупают».</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
 
@@ -711,8 +723,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти экспертов</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">Искать эксперта можно месяцами. Найдёшь с аудиторией — не хочет запускаться. Найдёшь готового — нет охватов.</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">Искать эксперта можно месяцами. Найдёшь с аудиторией — не хочет запускаться. Найдёшь готового — нет охватов.</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
 
@@ -728,8 +743,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти блогеров</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">70% времени уходит на рассылку портфолио блогерам, которые даже не читают директ. Ради одного заказа пишешь сотням.</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">70% времени уходит на рассылку портфолио блогерам, которые даже не читают директ. Ради одного заказа пишешь сотням.</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
 
@@ -745,8 +763,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">Биржи с оплатой за знаки убивают мотивацию. Бизнес, готовый платить за смыслы дорого, не ищет исполнителей на фрилансе.</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">Биржи с оплатой за знаки убивают мотивацию. Бизнес, готовый платить за смыслы дорого, не ищет исполнителей на фрилансе.</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
 
@@ -762,8 +783,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">Тотальная зависимость от сарафанного радио. Нет заказов — сидишь без денег, потому что холодный поиск кажется спамом.</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">Тотальная зависимость от сарафанного радио. Нет заказов — сидишь без денег, потому что холодный поиск кажется спамом.</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
 
@@ -779,8 +803,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бренды</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">Страх поднять чек. Клиенты требуют гарантий продаж за 15к в месяц, а бренды с нормальными бюджетами кажутся недосягаемыми.</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">Страх поднять чек. Клиенты требуют гарантий продаж за 15к в месяц, а бренды с нормальными бюджетами кажутся недосягаемыми.</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
 
@@ -796,8 +823,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти бизнес</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">Постоянный поиск связок выжигает. Клиент ушёл — судорожно ищешь нового, демпингуя на тестовом бюджете.</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">Постоянный поиск связок выжигает. Клиент ушёл — судорожно ищешь нового, демпингуя на тестовом бюджете.</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
 
@@ -813,8 +843,11 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div class="niche-panel__cta"><a href="#pricing" class="btn btn--accent js-auth-trigger">Найти компании</a></div>
           </div>
           <aside class="np__aside">
-            <span class="np__aside-label">Боль ниши</span>
-            <p class="niche-panel__pain">Ты делаешь гениальные автоворонки, но не умеешь перевести их ценность на язык бизнеса — в деньги и сэкономленные часы.</p>
+            <div class="np__aside-top">
+              <span class="np__aside-label">Боль ниши</span>
+              <p class="niche-panel__pain">Ты делаешь гениальные автоворонки, но не умеешь перевести их ценность на язык бизнеса — в деньги и сэкономленные часы.</p>
+            </div>
+            <div class="np__aside-foot"><span class="np__aside-arrow">→</span> Wareon находит их первым — с готовым оффером</div>
           </aside>
         </div>
       </div>
@@ -860,6 +893,10 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
           <li><span class="advantages__num">03</span><div class="advantages__body"><b>Персональный оффер.</b> Под каждый лид — готовый текст под его сигнал, а не общий шаблон.</div></li>
           <li><span class="advantages__num">04</span><div class="advantages__body"><b>Отмена в любой момент.</b> Никаких договоров и скрытых условий — платишь, пока это приносит клиентов.</div></li>
         </ol>
+        <div class="pricing__trust">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>Оплата разово, без автопродления · картой или СБП. Доступ открывается сразу.</span>
+        </div>
       </aside>
 
       <div class="calc reveal" style="--d:.1s">
