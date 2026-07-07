@@ -163,7 +163,26 @@ h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-0.02em;line-he
 .status{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;padding:3px 9px;border-radius:99px;display:inline-flex;align-items:center;gap:.4rem}
 .status::before{content:"";width:6px;height:6px;border-radius:50%}
 .status-ok{background:rgba(75,122,70,.12);color:var(--green)}.status-ok::before{background:var(--green)}
-.status-warm{background:rgba(200,146,46,.14);color:#8a6317}.status-warm::before{background:var(--warm)}
+.status-warm{background:rgba(200,146,46,.14);color:#8a6317}
+.st-wait{background:rgba(200,146,46,.14);color:#8a6317}
+.st-replied{background:rgba(75,122,70,.12);color:var(--green)}
+.st-active{background:var(--accent-tint);color:var(--accent-2)}
+.st-deal{background:var(--green);color:#fff}
+.st-declined{background:var(--paper-3);color:var(--ink-50)}
+.funnel{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--s5);margin-top:var(--s5)}
+.funnel__row{display:grid;grid-template-columns:118px 1fr 3ch;align-items:center;gap:var(--s4);margin-top:var(--s3)}
+.funnel__row:first-child{margin-top:0}
+.funnel__k{font-size:.85rem;color:var(--ink-70)}
+.funnel__track{height:26px;background:var(--paper-3);border-radius:8px;overflow:hidden}
+.funnel__bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:8px;min-width:6px;transition:width .5s var(--ease)}
+.funnel__v{font-family:var(--serif);font-size:1.2rem;font-weight:500;text-align:right}
+.dlg{display:flex;align-items:center;gap:var(--s4);padding:var(--s4) 0;border-bottom:1px solid var(--line)}
+.dlg:last-child{border-bottom:0}
+.dlg__b{flex:1;min-width:0}
+.dlg__name{font-weight:600;font-size:.95rem}
+.dlg__sig{font-size:.82rem;color:var(--ink-50);margin-top:3px}
+.dlg__act{display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center;flex-shrink:0}
+@media(max-width:640px){.dlg{flex-wrap:wrap}.dlg__b{flex-basis:100%;order:-1}.funnel__row{grid-template-columns:92px 1fr 3ch}}.status-warm::before{background:var(--warm)}
 
 /* offers */
 .offers{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--s4)}
@@ -262,6 +281,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
       <span class="side__label">Работа</span>
       <button class="nav-item is-active" data-nav="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Обзор</button>
       <button class="nav-item" data-nav="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Лиды <span class="nav-item__badge" id="leadBadge">12</span></button>
+      <button class="nav-item" data-nav="dialogs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Диалоги <span class="nav-item__badge" id="dialogBadge" hidden>0</span></button>
       <button class="nav-item" data-nav="offers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.17L4 17.17V4z"/><path d="M8 9h8M8 12h5"/></svg> Офферы</button>
       <button class="nav-item" data-nav="camp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg> Рассылки</button>
       <span class="side__label">Ресурсы</span>
@@ -314,7 +334,12 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
         <div class="stat"><div class="stat__label">Найдено лидов</div><div class="stat__val" id="statFound">128</div><div class="stat__delta" id="statFoundDelta">+12 сегодня</div></div>
         <div class="stat"><div class="stat__label">Офферов отправлено</div><div class="stat__val" id="statSent">43</div><div class="stat__delta" id="statSentDelta">за всё время</div></div>
         <div class="stat"><div class="stat__label">Ответов</div><div class="stat__val" id="statReplies">17</div><div class="stat__delta" id="statConv">39% конверсия</div></div>
-        <div class="stat"><div class="stat__label">В работе</div><div class="stat__val">5</div><div class="stat__delta down">сделки на согласовании</div></div>
+        <div class="stat"><div class="stat__label">В работе</div><div class="stat__val" id="statActive">0</div><div class="stat__delta down">сделки на согласовании</div></div>
+      </div>
+
+      <div class="funnel">
+        <div class="panel__head" style="margin-bottom:var(--s4)"><span class="panel__title">Воронка</span><span class="offer__stat">от находки до сделки</span></div>
+        <div id="funnelRows"></div>
       </div>
 
       <div class="grid-2">
@@ -354,6 +379,19 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
         <button class="chip" data-f="cold">Холодные</button>
       </div>
       <div class="panel"><div id="leadList"></div></div>
+    </section>
+
+    <!-- DIALOGS -->
+    <section class="section" id="s-dialogs">
+      <div class="topbar"><div><div class="topbar__kicker">Диалоги</div><h1>Переписки с клиентами</h1><p class="topbar__sub">Отправленные офферы становятся диалогами. Веди их по стадиям до сделки.</p></div></div>
+      <div class="chips" id="dlgChips">
+        <button class="chip is-active" data-s="all">Все</button>
+        <button class="chip" data-s="wait">Ждём ответа</button>
+        <button class="chip" data-s="replied">Ответили</button>
+        <button class="chip" data-s="active">В работе</button>
+        <button class="chip" data-s="deal">Сделки</button>
+      </div>
+      <div class="panel"><div id="dialogList"></div></div>
     </section>
 
     <!-- OFFERS -->
@@ -496,7 +534,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   }
 
   /* nav switching */
-  const sections={overview:'s-overview',leads:'s-leads',offers:'s-offers',camp:'s-camp',accounts:'s-accounts',settings:'s-settings'};
+  const sections={overview:'s-overview',leads:'s-leads',dialogs:'s-dialogs',offers:'s-offers',camp:'s-camp',accounts:'s-accounts',settings:'s-settings'};
   const go=(key)=>{
     if(!sections[key])return;
     qsa('.section').forEach(s=>s.classList.remove('is-active'));
@@ -518,7 +556,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   const S={ found:128, sent:43, replies:17, dailyLimit:50, dailySent:43, niche:'Дизайн', open:12, weekly:[32,45,38,50,41,29] };
   let foundToday=12;
   const accWord=(n)=>{const a=n%100,b=n%10,adj=(n===1)?'автономный':'автономных';let noun;if(a>10&&a<20)noun='аккаунтов';else if(b===1)noun='аккаунт';else if(b>=2&&b<=4)noun='аккаунта';else noun='аккаунтов';return adj+' '+noun;};
-  const R={};['statFound','statFoundDelta','statSent','statReplies','statConv','ovNew','ovNewWord','ovNiche','limitSent','limitMax','limitBar','limitAcc','sidePlan','leadBadge'].forEach(id=>R[id]=qs('#'+id));
+  const R={};['statFound','statFoundDelta','statSent','statReplies','statConv','ovNew','ovNewWord','ovNiche','limitSent','limitMax','limitBar','limitAcc','sidePlan','leadBadge','statActive'].forEach(id=>R[id]=qs('#'+id));
   const renderOverview=()=>{
     R.statFound.textContent=S.found;
     R.statFoundDelta.textContent='+'+foundToday+' сегодня';
@@ -531,7 +569,33 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     const acc=Math.ceil(S.dailyLimit/50); R.limitAcc.textContent=acc+' '+accWord(acc);
     R.sidePlan.textContent='Тариф · '+S.niche;
     R.leadBadge.textContent=S.open;
-    renderCampaigns(); renderAccounts();
+    if(R.statActive)R.statActive.textContent=dialogs.filter(d=>d.stage==='active').length;
+    const dNeed=dialogs.filter(d=>d.stage==='wait'||d.stage==='replied').length;
+    const dBadge=qs('#dialogBadge'); if(dBadge){dBadge.textContent=dNeed;dBadge.hidden=dNeed===0;}
+    renderCampaigns(); renderAccounts(); renderFunnel();
+  };
+
+  /* ---------- funnel + dialogs data ---------- */
+  const STAGES={wait:'Ждём ответа',replied:'Ответил',active:'В работе',deal:'Сделка',declined:'Отказ'};
+  const STAGE_CLS={wait:'st-wait',replied:'st-replied',active:'st-active',deal:'st-deal',declined:'st-declined'};
+  let dialogs=[
+    {name:'Селлер WB',tag:'Одежда',sig:'Инфографика карточек · конверсия <b>0.8%</b>',stage:'active'},
+    {name:'Магазин Ozon',tag:'Косметика',sig:'12 товаров · <b>фото без обработки</b>',stage:'replied'},
+    {name:'Шоурум',tag:'Обувь',sig:'Топ выдачи · <b>слабое главное фото</b>',stage:'deal'},
+    {name:'Инди-бренд',tag:'Аксессуары',sig:'Новая карточка · <b>нет инфографики</b>',stage:'active'},
+    {name:'Бренд посуды',tag:'WB',sig:'Растут продажи · <b>устаревший дизайн</b>',stage:'wait'},
+    {name:'Онлайн-магазин',tag:'Детское',sig:'Конверсия <b>1.2%</b> · нет рич-контента',stage:'declined'}
+  ];
+  const renderFunnel=()=>{
+    const el=qs('#funnelRows'); if(!el)return;
+    const deals=dialogs.filter(d=>d.stage==='deal').length;
+    const steps=[['Найдено',S.found],['Отправлено',S.sent],['Ответили',S.replies],['Сделки',deals]];
+    const max=steps[0][1]||1;
+    el.innerHTML=steps.map((row,i)=>{
+      const w=Math.max(4,Math.round(row[1]/max*100));
+      const op=(1-i*0.17).toFixed(2);
+      return '<div class="funnel__row"><span class="funnel__k">'+row[0]+'</span><div class="funnel__track"><div class="funnel__bar" style="width:'+w+'%;opacity:'+op+'"></div></div><span class="funnel__v">'+row[1]+'</span></div>';
+    }).join('');
   };
 
   /* ---------- campaigns (Рассылки): weekly chart + totals from state ---------- */
@@ -583,9 +647,9 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   const KEY='wareon_dash_v1';
   const readOffers=()=>qsa('#offersGrid .offer:not(.offer--new)').map(o=>({niche:o.querySelector('.offer__niche').textContent,title:o.querySelector('.offer__title').textContent,text:o.querySelector('.offer__text').textContent,stat:o.querySelector('.offer__stat').textContent}));
   const readCalc=()=>{const list=qsa('#calcNiches .pill');const per=qsa('.calc__period');const r=qs('#calcRange');return{nicheIdx:list.indexOf(qs('#calcNiches .pill.is-active')),platforms:qsa('#calcPlatforms .pill.is-active').map(p=>p.dataset.platform),volume:r?r.value:'50',periodIdx:per.indexOf(qs('.calc__period.is-active'))};};
-  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({S,foundToday,leads,offers:readOffers(),calc:readCalc()}));}catch(e){}};
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({S,foundToday,leads,dialogs,offers:readOffers(),calc:readCalc()}));}catch(e){}};
   let saved=null; try{saved=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){saved=null;}
-  if(saved){ if(saved.S)Object.assign(S,saved.S); if(typeof saved.foundToday==='number')foundToday=saved.foundToday; if(Array.isArray(saved.leads)&&saved.leads.length)leads=saved.leads; }
+  if(saved){ if(saved.S)Object.assign(S,saved.S); if(typeof saved.foundToday==='number')foundToday=saved.foundToday; if(Array.isArray(saved.leads)&&saved.leads.length)leads=saved.leads; if(Array.isArray(saved.dialogs))dialogs=saved.dialogs; }
 
   let filter='all';
   const leadList=qs('#leadList'), ovLeads=qs('#overviewLeads');
@@ -602,7 +666,8 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     if(!leads[i]||leads[i].sent)return;
     if(S.dailySent>=S.dailyLimit){toast('Дневной лимит исчерпан — увеличь объём в «Настройках»');return;}
     leads[i].sent=true; S.sent++; S.dailySent++; S.open=Math.max(0,S.open-1);
-    renderLeads(); renderOverview(); save();
+    dialogs.unshift({name:leads[i].name,tag:leads[i].tag,sig:leads[i].sig,stage:'wait'});
+    renderLeads(); renderDialogs(); renderOverview(); save();
     toast('Оффер отправлен · '+S.sent+' всего');
   };
   leadList.addEventListener('click',e=>{const b=e.target.closest('.js-send');if(b)sendOffer(parseInt(b.dataset.i,10));});
@@ -626,7 +691,34 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   const addAccBtn=qs('#addAccount');
   if(addAccBtn)addAccBtn.addEventListener('click',()=>{ S.dailyLimit+=50; renderOverview(); save(); toast('Аккаунт добавлен · лимит '+S.dailyLimit+' сообщений в день'); });
 
-  renderLeads(); renderOverview();
+  /* ---------- dialogs render + handlers ---------- */
+  let dlgFilter='all';
+  const dlgNextLabel={wait:'Отметить ответ',replied:'Взять в работу'};
+  const dlgRow=(d,i)=>{
+    let actions='';
+    if(d.stage==='wait'||d.stage==='replied') actions='<button class="btn btn--sm js-dlg-next" data-i="'+i+'">'+dlgNextLabel[d.stage]+'</button>';
+    else if(d.stage==='active') actions='<button class="btn btn--sm js-dlg-next" data-i="'+i+'">Сделка ✓</button><button class="btn btn--ghost btn--sm js-dlg-decline" data-i="'+i+'">Отказ</button>';
+    return '<div class="dlg"><span class="status '+STAGE_CLS[d.stage]+'">'+STAGES[d.stage]+'</span>'
+      +'<div class="dlg__b"><div class="dlg__name">'+d.name+' <span class="lead__tag">'+d.tag+'</span></div><div class="dlg__sig">'+d.sig+'</div></div>'
+      +'<div class="dlg__act">'+actions+'</div></div>';
+  };
+  const renderDialogs=()=>{
+    const el=qs('#dialogList'); if(!el)return;
+    const rows=dialogs.map((d,i)=>[d,i]).filter(pair=>dlgFilter==='all'||pair[0].stage===dlgFilter);
+    el.innerHTML=rows.length?rows.map(pair=>dlgRow(pair[0],pair[1])).join(''):'<p style="color:var(--ink-50);padding:var(--s4)">Здесь пока пусто. Отправь оффер во «Лидах» — появится диалог.</p>';
+  };
+  qs('#dialogList').addEventListener('click',e=>{
+    const nx=e.target.closest('.js-dlg-next'), dc=e.target.closest('.js-dlg-decline');
+    if(nx){const d=dialogs[+nx.dataset.i];if(!d)return;
+      if(d.stage==='wait'){d.stage='replied';S.replies++;toast('Клиент ответил');}
+      else if(d.stage==='replied'){d.stage='active';toast('Взяли в работу');}
+      else if(d.stage==='active'){d.stage='deal';toast('Сделка! Поздравляем 🎉');}
+      renderDialogs();renderOverview();save();
+    } else if(dc){const d=dialogs[+dc.dataset.i];if(!d)return;d.stage='declined';toast('Отмечено как отказ');renderDialogs();renderOverview();save();}
+  });
+  qs('#dlgChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;qsa('#dlgChips .chip').forEach(x=>x.classList.remove('is-active'));c.classList.add('is-active');dlgFilter=c.dataset.s;renderDialogs();});
+
+  renderLeads(); renderDialogs(); renderOverview();
 
   /* ---------- offer editor ---------- */
   const offerModal=qs('#offerModal'),offerGrid=qs('#offersGrid'),offerNewBtn=qs('#offerNew'),
