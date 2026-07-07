@@ -630,7 +630,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     </nav>
 
     <div class="header__actions">
-      <a class="header__login js-demo" href="dashboard.html">Демо кабинета</a>
       <a class="btn btn--accent btn--sm js-tg" href="https://t.me/artemwinzay">Заказать</a>
       <button class="nav-toggle" id="navToggle" aria-label="Меню" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
@@ -641,7 +640,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     <a href="#niches">Специализации</a>
     <a href="#how">Как это работает</a>
     <a href="#pricing">Стоимость</a>
-    <a class="mobile-menu__login js-demo" href="dashboard.html">Демо кабинета</a>
     <a class="btn btn--accent js-tg" href="https://t.me/artemwinzay">Сделать заказ</a>
   </nav>
 </header>
@@ -1037,7 +1035,7 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
             <div><span class="calc__price-value" id="calcPrice">990&nbsp;₽</span> <span class="calc__price-period" id="calcPeriodLabel">/ месяц</span></div>
           </div>
           <div class="calc__note" id="calcNote"></div>
-          <button class="btn btn--accent calc__cta js-tg" id="calcCta">Оформить заказ</button>
+          <a class="btn btn--accent calc__cta js-tg" id="calcCta" href="https://t.me/artemwinzay">Оформить заказ</a>
           <p class="calc__fine">Доступ открывается сразу после оплаты. Отмена в любой момент.</p>
         </div>
       </div>
@@ -1389,9 +1387,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     if (el.tagName === 'A') { el.setAttribute('href', TG); el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener'); }
     else { el.style.cursor = 'pointer'; el.addEventListener('click', (e) => { e.preventDefault(); window.open(TG, '_blank', 'noopener'); }); }
   });
-  document.querySelectorAll('.js-demo').forEach((el) => {
-    el.addEventListener('click', (e) => { e.preventDefault(); navTo('dashboard.html'); });
-  });
 
   /* ---- 4. Pricing calculator ---- */
   const range = document.getElementById('calcRange');
@@ -1464,14 +1459,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     }));
     syncPlatforms(); render();
 
-    let calcPending = false;
-    cta.addEventListener('click', () => {
-      if (calcPending || cta.disabled) return;
-      calcPending = true;
-      cta.classList.add('is-loading'); cta.style.pointerEvents = 'none';
-      cta.textContent = 'Создаём аккаунт…';
-      setTimeout(() => { navTo('dashboard.html'); }, 1200);
-    });
   }
 })();
 </script>
