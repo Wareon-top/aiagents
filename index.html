@@ -501,6 +501,15 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 .faq__item[open] .faq__ic::after{ transform:scaleY(0); }
 .faq__a{ padding:0 var(--s5) var(--s5); color:var(--ink-70); }
 .faq__a p{ margin:0; line-height:1.6; text-wrap:pretty; }
+/* ---------- ABOUT ---------- */
+.about__body{ margin-top:var(--s6); max-width:820px; }
+.about__lead{ font-size:var(--fs-body-lg); color:var(--ink); }
+.about__body p+p{ margin-top:var(--s4); color:var(--ink-70); }
+.about__stats{ margin-top:var(--s7); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s5); }
+.about__stat{ padding-left:var(--s4); border-left:2px solid var(--accent); }
+.about__stat b{ display:block; font-family:var(--serif); font-weight:900; font-size:clamp(2rem, 1.4rem + 2.2vw, 3rem); letter-spacing:-0.03em; color:var(--accent); line-height:1; }
+.about__stat span{ display:block; margin-top:var(--s3); font-size:var(--fs-sm); color:var(--ink-70); line-height:1.35; }
+@media (max-width:560px){ .about__stats{ grid-template-columns:1fr; gap:var(--s4); } }
 .site-footer{ border-top:1px solid var(--line); padding-block:var(--s8) var(--s6); }
 .footer__grid{ display:grid; grid-template-columns:1.6fr 1fr 1.2fr 1.1fr; gap:var(--s6); }
 .footer__brand p{ margin-top:var(--s4); font-size:var(--fs-sm); color:var(--ink-70); max-width:32ch; }
@@ -970,6 +979,23 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
         <span class="step__num">03 / Результат</span>
         <h4 class="step__title">Получи заказ</h4>
         <p class="step__body">Для каждого клиента — готовый персональный оффер. Просто нажми «отправить».</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about section container" id="about">
+    <div class="sec-head reveal">
+      <span class="kicker">О нас</span>
+      <h2>Приносим клиентов, <span class="serif-i accent">пока ты работаешь.</span></h2>
+    </div>
+    <div class="about__body reveal">
+      <p class="about__lead">Wareon вырос из простой идеи: сильному специалисту не должно приходиться выпрашивать заказы. Пока одни рассылают отклики в пустоту, мы анализируем тысячи бизнесов и находим тех, кому твоя работа нужна прямо сейчас — с готовым персональным оффером под каждого.</p>
+      <p>Мы не продаём «базы контактов». Мы берём на себя самую скучную часть — поиск — и приносим тёплые заявки. За это время система уже дала фрилансерам ощутимый результат:</p>
+      <div class="about__stats">
+        <div class="about__stat"><b>300К ₽+</b><span>принесли фрилансерам</span></div>
+        <div class="about__stat"><b>600+</b><span>заявок</span></div>
+        <div class="about__stat"><b>80+</b><span>закрытых клиентов</span></div>
       </div>
     </div>
   </section>
