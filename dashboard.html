@@ -214,6 +214,16 @@ h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-0.02em;line-he
 .dlgc__reply{display:flex;gap:var(--s2);margin-top:var(--s4)}
 .dlgc__reply .ov-input{flex:1}
 .dlgc__empty{color:var(--ink-50);font-size:.85rem;text-align:center;width:100%;padding:var(--s3)}
+.list-tools{display:flex;gap:var(--s3);margin-top:var(--s4);flex-wrap:wrap}
+.list-tools input{flex:1;min-width:180px;padding:.55rem .85rem;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-s);font-size:.9rem;color:var(--ink)}
+.list-tools input:focus{outline:none;border-color:var(--accent)}
+.list-tools select{padding:.55rem .85rem;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-s);font-size:.9rem;color:var(--ink);cursor:pointer}
+.prof-av{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--serif);font-size:1.5rem;margin-top:var(--s4)}
+.prof-swatches{display:flex;gap:var(--s2);margin-top:var(--s2)}
+.prof-sw{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s var(--ease)}
+.prof-sw.is-active{border-color:var(--ink);transform:scale(1.12)}
+.prof-toggle{display:flex;align-items:center;gap:var(--s3);margin-top:var(--s5);font-size:.9rem;color:var(--ink-70);cursor:pointer}
+.prof-toggle input{width:18px;height:18px;accent-color:var(--accent)}
 @keyframes ovin{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
 .ov-close{position:absolute;top:var(--s4);right:var(--s4);width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--ink-50)}
 .ov-close:hover{background:var(--paper-2);color:var(--ink)}
@@ -303,7 +313,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
       <button class="nav-item" data-nav="accounts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M7 4v5"/></svg> Аккаунты</button>
       <button class="nav-item" data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.9 1.09V22a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 20.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3.6 15a1.65 1.65 0 0 0-1.09-.9H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.6 8.9a1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 6.04 4.2l.06.06A1.65 1.65 0 0 0 8 4.6h.05A1.65 1.65 0 0 0 9 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 14 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.4 9v.05c.2.61.76 1.03 1.4 1.05H22a2 2 0 0 1 0 4h-.09c-.64.02-1.2.44-1.51 1z"/></svg> Настройки</button>
     </nav>
-    <div class="side__user">
+    <div class="side__user" id="sideUser">
       <div class="side__avatar" id="avatar">Д</div>
       <div class="side__uinfo"><div class="side__uname" id="uname">Дмитрий</div><div class="side__uplan" id="sidePlan">Тариф · Дизайн</div></div>
       <button class="side__logout" id="logout" title="Выйти" aria-label="Выйти"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
@@ -339,7 +349,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
       <div class="topbar">
         <div>
           <div class="topbar__kicker">Обзор</div>
-          <h1>С возвращением, Дмитрий</h1>
+          <h1 id="ovGreet">С возвращением, Дмитрий</h1>
           <p class="topbar__sub">За сегодня система нашла <b id="ovNew">12</b> новых <span id="ovNewWord">лидов</span> под нишу «<span id="ovNiche">Дизайн</span>».</p>
         </div>
         <button class="btn" data-nav="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> Смотреть лидов</button>
@@ -393,6 +403,10 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
         <button class="chip" data-f="warm">Тёплые</button>
         <button class="chip" data-f="cold">Холодные</button>
       </div>
+      <div class="list-tools">
+        <input id="leadSearch" type="search" placeholder="Поиск по названию, нише, сигналу…" autocomplete="off">
+        <select id="leadSort" aria-label="Сортировка"><option value="new">Сначала новые</option><option value="hot">Сначала горячие</option><option value="name">По названию</option></select>
+      </div>
       <div class="panel"><div id="leadList"></div></div>
     </section>
 
@@ -405,6 +419,10 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
         <button class="chip" data-s="replied">Ответили</button>
         <button class="chip" data-s="active">В работе</button>
         <button class="chip" data-s="deal">Сделки</button>
+      </div>
+      <div class="list-tools">
+        <input id="dlgSearch" type="search" placeholder="Поиск по клиенту…" autocomplete="off">
+        <select id="dlgSort" aria-label="Сортировка"><option value="new">Сначала новые</option><option value="stage">По стадии</option><option value="name">По названию</option></select>
       </div>
       <div class="panel"><div id="dialogList"></div></div>
     </section>
@@ -516,6 +534,21 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     <label class="ov-label">Текст оффера</label>
     <textarea id="offerTextInput" class="ov-textarea" rows="5" placeholder="Текст, который увидит клиент…"></textarea>
     <div class="ov-actions"><button class="btn btn--ghost btn--sm" id="offerCancel">Отмена</button><button class="btn btn--sm" id="offerSave">Сохранить</button></div>
+  </div>
+</div>
+
+<div class="ov-overlay" id="profModal" hidden>
+  <div class="ov-box">
+    <button class="ov-close" id="profClose" aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    <span class="kicker">Профиль</span>
+    <h3 style="margin-top:var(--s2)">Настройки аккаунта</h3>
+    <div class="prof-av" id="profAvPreview">Д</div>
+    <label class="ov-label">Имя</label>
+    <input id="profName" class="ov-input" type="text" maxlength="40" placeholder="Как тебя зовут">
+    <label class="ov-label">Цвет аватара</label>
+    <div class="prof-swatches" id="profSwatches"></div>
+    <label class="prof-toggle"><input type="checkbox" id="profNotif"> <span>Уведомлять о новых ответах</span></label>
+    <div class="ov-actions"><button class="btn btn--ghost btn--sm" id="profLogout">Выйти</button><button class="btn btn--sm" id="profSave">Сохранить</button></div>
   </div>
 </div>
 
@@ -702,7 +735,18 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
       <div class="lead__action">${l.sent?'<span class="sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Отправлено</span>':'<button class="btn btn--sm js-send" data-i="'+i+'">Отправить оффер</button>'}</div></div>`;
   const applyFilter=()=>qsa('.lead',leadList).forEach(r=>{r.style.display=(filter==='all'||r.dataset.t===filter)?'':'none';});
   const renderOv=()=>{ ovLeads.innerHTML=leads.slice(0,3).map(l=>`<div class="lead"><span class="lead__dot ${dotOf(l.t)}"></span><div class="lead__body"><div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div><div class="lead__signal">${l.sig}</div></div><div class="lead__action">${l.sent?'<span class="sent">Отправлено</span>':'<span class="lead__tag">Оффер готов</span>'}</div></div>`).join(''); };
-  const renderLeads=()=>{ leadList.innerHTML=leads.map(leadRow).join('')||'<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лидов».</p>'; applyFilter(); renderOv(); };
+  const renderLeads=()=>{
+    const q=((qs('#leadSearch')&&qs('#leadSearch').value)||'').toLowerCase().trim();
+    const sort=(qs('#leadSort')&&qs('#leadSort').value)||'new';
+    let view=leads.map((l,i)=>({l,i}));
+    if(filter!=='all')view=view.filter(o=>o.l.t===filter);
+    if(q)view=view.filter(o=>(o.l.name+' '+o.l.tag+' '+stripTags(o.l.sig)).toLowerCase().indexOf(q)>-1);
+    const rank={hot:0,warm:1,cold:2};
+    if(sort==='hot')view.sort((a,b)=>rank[a.l.t]-rank[b.l.t]);
+    else if(sort==='name')view.sort((a,b)=>a.l.name.localeCompare(b.l.name,'ru'));
+    leadList.innerHTML=view.length?view.map(o=>leadRow(o.l,o.i)).join(''):(leads.length?'<p style="color:var(--ink-50);padding:var(--s4)">Ничего не найдено.</p>':'<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лидов».</p>');
+    renderOv();
+  };
 
   const doSend=(i,offerText)=>{
     if(!leads[i]||leads[i].sent)return;
@@ -747,7 +791,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
       toast('Найдено +'+k+' '+pluralLead(k));
     },900);
   });
-  qs('#leadChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;qsa('.chip').forEach(x=>x.classList.remove('is-active'));c.classList.add('is-active');filter=c.dataset.f;applyFilter();});
+  qs('#leadChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;qsa('#leadChips .chip').forEach(x=>x.classList.remove('is-active'));c.classList.add('is-active');filter=c.dataset.f;renderLeads();});
 
   const addAccBtn=qs('#addAccount');
   if(addAccBtn)addAccBtn.addEventListener('click',()=>{ S.dailyLimit+=50; renderOverview(); save(); toast('Аккаунт добавлен · лимит '+S.dailyLimit+' сообщений в день'); });
@@ -765,8 +809,15 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   };
   const renderDialogs=()=>{
     const el=qs('#dialogList'); if(!el)return;
-    const rows=dialogs.map((d,i)=>[d,i]).filter(pair=>dlgFilter==='all'||pair[0].stage===dlgFilter);
-    el.innerHTML=rows.length?rows.map(pair=>dlgRow(pair[0],pair[1])).join(''):'<p style="color:var(--ink-50);padding:var(--s4)">Здесь пока пусто. Отправь оффер во «Лидах» — появится диалог.</p>';
+    const q=((qs('#dlgSearch')&&qs('#dlgSearch').value)||'').toLowerCase().trim();
+    const sort=(qs('#dlgSort')&&qs('#dlgSort').value)||'new';
+    let rows=dialogs.map((d,i)=>({d,i}));
+    if(dlgFilter!=='all')rows=rows.filter(o=>o.d.stage===dlgFilter);
+    if(q)rows=rows.filter(o=>(o.d.name+' '+o.d.tag+' '+stripTags(o.d.sig)).toLowerCase().indexOf(q)>-1);
+    const order={wait:0,replied:1,active:2,deal:3,declined:4};
+    if(sort==='stage')rows.sort((a,b)=>order[a.d.stage]-order[b.d.stage]);
+    else if(sort==='name')rows.sort((a,b)=>a.d.name.localeCompare(b.d.name,'ru'));
+    el.innerHTML=rows.length?rows.map(o=>dlgRow(o.d,o.i)).join(''):(dialogs.length?'<p style="color:var(--ink-50);padding:var(--s4)">Ничего не найдено.</p>':'<p style="color:var(--ink-50);padding:var(--s4)">Здесь пока пусто. Отправь оффер во «Лидах» — появится диалог.</p>');
   };
   /* --- dialog stage engine + card --- */
   const NEXT_STAGE={wait:'replied',replied:'active',active:'deal'};
@@ -921,6 +972,42 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     if(h.includes('htmlpreview.github.io')){location.href=h.replace('dashboard.html','index-lite.html');}
     else{location.href='index.html';}
   });
+
+  /* ---- search / sort listeners ---- */
+  const _ls=qs('#leadSearch'),_lso=qs('#leadSort'),_ds=qs('#dlgSearch'),_dso=qs('#dlgSort');
+  if(_ls)_ls.addEventListener('input',renderLeads);
+  if(_lso)_lso.addEventListener('change',renderLeads);
+  if(_ds)_ds.addEventListener('input',renderDialogs);
+  if(_dso)_dso.addEventListener('change',renderDialogs);
+
+  /* ---- profile / account customization ---- */
+  const AVATARS=['#B24A1E','#8F3A16','#C8922E','#4B7A46','#2E6B8F','#7A3B8F'];
+  let profColor=(__s.user&&__s.user.avatar)||AVATARS[0];
+  (function(){var a=qs('#avatar');if(a)a.style.background=profColor;})();
+  const profRenderSw=()=>{qs('#profSwatches').innerHTML=AVATARS.map(c=>'<span class="prof-sw'+(c===profColor?' is-active':'')+'" data-c="'+c+'" style="background:'+c+'"></span>').join('');};
+  const openProfile=()=>{
+    const nm=(__s.user&&__s.user.name)||'Дмитрий';
+    qs('#profName').value=nm;
+    const pv=qs('#profAvPreview'); pv.textContent=(nm.trim()[0]||'Д').toUpperCase(); pv.style.background=profColor;
+    qs('#profNotif').checked=!!(__s.user&&__s.user.notif);
+    profRenderSw();
+    qs('#profModal').hidden=false;
+  };
+  qs('#profSwatches').addEventListener('click',e=>{const sw=e.target.closest('.prof-sw');if(!sw)return;profColor=sw.dataset.c;profRenderSw();qs('#profAvPreview').style.background=profColor;});
+  qs('#profName').addEventListener('input',()=>{const v=(qs('#profName').value||'').trim();qs('#profAvPreview').textContent=(v[0]||'Д').toUpperCase();});
+  qs('#profSave').addEventListener('click',()=>{
+    const nm=qs('#profName').value.trim()||'Пользователь';
+    __s.user.name=nm; __s.user.avatar=profColor; __s.user.notif=qs('#profNotif').checked;
+    try{localStorage.setItem('wareon_session',JSON.stringify(__s));}catch(e){}
+    qs('#uname').textContent=nm; var a=qs('#avatar'); a.textContent=(nm[0]||'П').toUpperCase(); a.style.background=profColor;
+    var g=qs('#ovGreet'); if(g)g.textContent='С возвращением, '+nm;
+    qs('#profModal').hidden=true; toast('Профиль сохранён');
+  });
+  const profClose=()=>{qs('#profModal').hidden=true;};
+  qs('#profClose').addEventListener('click',profClose);
+  qs('#profModal').addEventListener('click',e=>{if(e.target===qs('#profModal'))profClose();});
+  qs('#profLogout').addEventListener('click',()=>{try{localStorage.removeItem('wareon_session');}catch(e){}qs('#logout').click();});
+  var _su=qs('#sideUser'); if(_su)_su.addEventListener('click',e=>{if(e.target.closest('#logout'))return;openProfile();});
 })();
 </script>
 </body>
