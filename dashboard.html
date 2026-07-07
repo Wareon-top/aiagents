@@ -199,6 +199,21 @@ h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-0.02em;line-he
 .ov-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:var(--s5);background:rgba(27,26,22,.42);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 .ov-overlay[hidden]{display:none}
 .ov-box{position:relative;width:100%;max-width:440px;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-l);padding:clamp(1.5rem,1rem + 2vw,2.25rem);animation:ovin .3s var(--ease)}
+.ov-box--wide{max-width:520px}
+.send-offer{display:block;width:100%;text-align:left;border:1px solid var(--line-2);background:var(--paper);border-radius:var(--r-s);padding:.55rem .8rem;margin-top:var(--s2);cursor:pointer;transition:.15s var(--ease)}
+.send-offer:hover{border-color:var(--ink-50)}
+.send-offer.is-active{border-color:var(--accent);background:var(--accent-tint)}
+.send-offer__n{display:block;font-family:var(--mono);font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-50)}
+.send-offer__t{font-weight:600;font-size:.9rem}
+.dlg{cursor:pointer}
+.dlgc__head{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s4);margin-bottom:var(--s4)}
+.dlgc__thread{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--s4);max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:var(--s3)}
+.bubble{max-width:82%;padding:.55rem .8rem;border-radius:14px;font-size:.9rem;line-height:1.45}
+.bubble--me{align-self:flex-end;background:var(--accent);color:var(--on-accent);border-bottom-right-radius:4px}
+.bubble--them{align-self:flex-start;background:var(--card);border:1px solid var(--line-2);border-bottom-left-radius:4px}
+.dlgc__reply{display:flex;gap:var(--s2);margin-top:var(--s4)}
+.dlgc__reply .ov-input{flex:1}
+.dlgc__empty{color:var(--ink-50);font-size:.85rem;text-align:center;width:100%;padding:var(--s3)}
 @keyframes ovin{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
 .ov-close{position:absolute;top:var(--s4);right:var(--s4);width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--ink-50)}
 .ov-close:hover{background:var(--paper-2);color:var(--ink)}
@@ -504,6 +519,33 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   </div>
 </div>
 
+<div class="ov-overlay" id="sendModal" hidden>
+  <div class="ov-box">
+    <button class="ov-close" id="sendClose" aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    <span class="kicker">Отправка оффера</span>
+    <h3 id="sendLeadName" style="margin-top:var(--s2)">—</h3>
+    <p id="sendLeadSig" class="dlg__sig" style="margin-top:3px"></p>
+    <label class="ov-label">Шаблон оффера</label>
+    <div id="sendOffers"></div>
+    <label class="ov-label">Текст (можно поправить перед отправкой)</label>
+    <textarea id="sendText" class="ov-textarea" rows="5"></textarea>
+    <div class="ov-actions"><button class="btn btn--ghost btn--sm" id="sendCancel">Отмена</button><button class="btn btn--sm" id="sendConfirm">Отправить оффер</button></div>
+  </div>
+</div>
+
+<div class="ov-overlay" id="dlgModal" hidden>
+  <div class="ov-box ov-box--wide">
+    <button class="ov-close" id="dlgClose" aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    <div class="dlgc__head">
+      <div><span class="kicker">Диалог</span><h3 id="dlgcName" style="margin-top:2px">—</h3><p id="dlgcSig" class="dlg__sig" style="margin-top:3px"></p></div>
+      <span class="status" id="dlgcStage" style="flex-shrink:0"></span>
+    </div>
+    <div class="dlgc__thread" id="dlgcThread"></div>
+    <div class="dlgc__reply"><input id="dlgcInput" class="ov-input" placeholder="Написать сообщение…" autocomplete="off"><button class="btn btn--sm" id="dlgcSend" aria-label="Отправить"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div>
+    <div class="ov-actions" id="dlgcActions" style="margin-top:var(--s4)"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg">Готово</span></div>
 
 <script>
@@ -662,15 +704,34 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
   const renderOv=()=>{ ovLeads.innerHTML=leads.slice(0,3).map(l=>`<div class="lead"><span class="lead__dot ${dotOf(l.t)}"></span><div class="lead__body"><div class="lead__name">${l.name} <span class="lead__tag">${l.tag}</span></div><div class="lead__signal">${l.sig}</div></div><div class="lead__action">${l.sent?'<span class="sent">Отправлено</span>':'<span class="lead__tag">Оффер готов</span>'}</div></div>`).join(''); };
   const renderLeads=()=>{ leadList.innerHTML=leads.map(leadRow).join('')||'<p style="color:var(--ink-50);padding:var(--s4)">Пока пусто — нажми «Найти ещё лидов».</p>'; applyFilter(); renderOv(); };
 
-  const sendOffer=(i)=>{
+  const doSend=(i,offerText)=>{
     if(!leads[i]||leads[i].sent)return;
     if(S.dailySent>=S.dailyLimit){toast('Дневной лимит исчерпан — увеличь объём в «Настройках»');return;}
     leads[i].sent=true; S.sent++; S.dailySent++; S.open=Math.max(0,S.open-1);
-    dialogs.unshift({name:leads[i].name,tag:leads[i].tag,sig:leads[i].sig,stage:'wait'});
+    dialogs.unshift({name:leads[i].name,tag:leads[i].tag,sig:leads[i].sig,stage:'wait',offer:offerText,messages:[{from:'me',text:offerText}]});
     renderLeads(); renderDialogs(); renderOverview(); save();
     toast('Оффер отправлен · '+S.sent+' всего');
   };
-  leadList.addEventListener('click',e=>{const b=e.target.closest('.js-send');if(b)sendOffer(parseInt(b.dataset.i,10));});
+  /* --- send-offer picker modal --- */
+  let sendIndex=-1;
+  const closeSend=()=>{ qs('#sendModal').hidden=true; sendIndex=-1; };
+  const openSendModal=(i)=>{
+    const l=leads[i]; if(!l||l.sent)return; sendIndex=i;
+    qs('#sendLeadName').textContent=l.name;
+    qs('#sendLeadSig').innerHTML=l.sig;
+    const offers=qsa('#offersGrid .offer:not(.offer--new)').map(o=>({t:o.querySelector('.offer__title').textContent,n:o.querySelector('.offer__niche').textContent,x:o.querySelector('.offer__text').textContent}));
+    const box=qs('#sendOffers');
+    box.innerHTML=offers.length?offers.map((o,k)=>'<button type="button" class="send-offer'+(k===0?' is-active':'')+'" data-k="'+k+'"><span class="send-offer__n">'+o.n+'</span><span class="send-offer__t">'+o.t+'</span></button>').join(''):'<p class="dlgc__empty">Нет шаблонов — создай их в разделе «Офферы».</p>';
+    box.dataset.offers=JSON.stringify(offers);
+    qs('#sendText').value=offers[0]?offers[0].x:'';
+    qs('#sendModal').hidden=false;
+  };
+  qs('#sendOffers').addEventListener('click',e=>{ const b=e.target.closest('.send-offer'); if(!b)return; qsa('#sendOffers .send-offer').forEach(x=>x.classList.remove('is-active')); b.classList.add('is-active'); const offers=JSON.parse(qs('#sendOffers').dataset.offers||'[]'); const o=offers[+b.dataset.k]; if(o)qs('#sendText').value=o.x; });
+  qs('#sendClose').addEventListener('click',closeSend);
+  qs('#sendCancel').addEventListener('click',closeSend);
+  qs('#sendModal').addEventListener('click',e=>{if(e.target===qs('#sendModal'))closeSend();});
+  qs('#sendConfirm').addEventListener('click',()=>{ if(sendIndex<0)return; const t=qs('#sendText').value.trim(); doSend(sendIndex, t||'Здравствуйте!'); closeSend(); });
+  leadList.addEventListener('click',e=>{const b=e.target.closest('.js-send');if(b)openSendModal(parseInt(b.dataset.i,10));});
 
   const findBtn=qs('#findMore');
   findBtn.addEventListener('click',()=>{
@@ -698,7 +759,7 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     let actions='';
     if(d.stage==='wait'||d.stage==='replied') actions='<button class="btn btn--sm js-dlg-next" data-i="'+i+'">'+dlgNextLabel[d.stage]+'</button>';
     else if(d.stage==='active') actions='<button class="btn btn--sm js-dlg-next" data-i="'+i+'">Сделка ✓</button><button class="btn btn--ghost btn--sm js-dlg-decline" data-i="'+i+'">Отказ</button>';
-    return '<div class="dlg"><span class="status '+STAGE_CLS[d.stage]+'">'+STAGES[d.stage]+'</span>'
+    return '<div class="dlg" data-i="'+i+'"><span class="status '+STAGE_CLS[d.stage]+'">'+STAGES[d.stage]+'</span>'
       +'<div class="dlg__b"><div class="dlg__name">'+d.name+' <span class="lead__tag">'+d.tag+'</span></div><div class="dlg__sig">'+d.sig+'</div></div>'
       +'<div class="dlg__act">'+actions+'</div></div>';
   };
@@ -707,15 +768,63 @@ input[type="range"]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;b
     const rows=dialogs.map((d,i)=>[d,i]).filter(pair=>dlgFilter==='all'||pair[0].stage===dlgFilter);
     el.innerHTML=rows.length?rows.map(pair=>dlgRow(pair[0],pair[1])).join(''):'<p style="color:var(--ink-50);padding:var(--s4)">Здесь пока пусто. Отправь оффер во «Лидах» — появится диалог.</p>';
   };
+  /* --- dialog stage engine + card --- */
+  const NEXT_STAGE={wait:'replied',replied:'active',active:'deal'};
+  const stripTags=(x)=>String(x).replace(/<[^>]+>/g,'');
+  const ensureThread=(d)=>{
+    if(d.messages)return;
+    const offer=d.offer||('Здравствуйте! Заметил по вашей карточке: '+stripTags(d.sig)+'. Готов показать короткий разбор — скинуть?');
+    d.messages=[{from:'me',text:offer}];
+    if(d.stage==='replied'||d.stage==='active'||d.stage==='deal')d.messages.push({from:'them',text:'Здравствуйте! Да, интересно — расскажите подробнее.'});
+    if(d.stage==='active'||d.stage==='deal')d.messages.push({from:'me',text:'Отправил короткий разбор и пример до/после. Когда удобно обсудить?'});
+    if(d.stage==='deal')d.messages.push({from:'them',text:'Договорились, давайте работать!'});
+  };
+  const stageMsg={replied:{from:'them',text:'Здравствуйте! Да, интересно — расскажите подробнее.'},active:{from:'me',text:'Отправил короткий разбор и пример до/после. Когда удобно обсудить?'},deal:{from:'them',text:'Договорились, давайте работать!'},declined:{from:'them',text:'Спасибо, пока не актуально.'}};
+  const stageToast={replied:'Клиент ответил',active:'Взяли в работу',deal:'Сделка! Поздравляем 🎉',declined:'Отмечено как отказ'};
+  let openDlgIndex=-1;
+  const bubble=(m)=>'<div class="bubble bubble--'+(m.from==='me'?'me':'them')+'">'+m.text+'</div>';
+  const renderDlgCard=(i)=>{
+    const d=dialogs[i]; if(!d)return; ensureThread(d);
+    qs('#dlgcName').textContent=d.name;
+    qs('#dlgcSig').innerHTML=d.sig;
+    const st=qs('#dlgcStage'); st.className='status '+STAGE_CLS[d.stage]; st.textContent=STAGES[d.stage];
+    qs('#dlgcThread').innerHTML=d.messages.map(bubble).join('');
+    let a='';
+    if(d.stage==='wait')a='<button class="btn btn--sm js-card-next">Отметить ответ</button>';
+    else if(d.stage==='replied')a='<button class="btn btn--sm js-card-next">Взять в работу</button>';
+    else if(d.stage==='active')a='<button class="btn btn--sm js-card-next">Сделка ✓</button><button class="btn btn--ghost btn--sm js-card-decline">Отказ</button>';
+    else a='<span class="dlgc__empty">Диалог завершён · '+STAGES[d.stage]+'</span>';
+    qs('#dlgcActions').innerHTML=a;
+    const th=qs('#dlgcThread'); th.scrollTop=th.scrollHeight;
+  };
+  const openDlgCard=(i)=>{ openDlgIndex=i; renderDlgCard(i); qs('#dlgModal').hidden=false; };
+  const closeDlg=()=>{ qs('#dlgModal').hidden=true; openDlgIndex=-1; };
+  const moveStage=(i,to)=>{
+    const d=dialogs[i]; if(!d||!to)return; ensureThread(d);
+    const prev=d.stage; d.stage=to;
+    if(to==='replied'&&prev==='wait')S.replies++;
+    if(stageMsg[to])d.messages.push(stageMsg[to]);
+    renderDialogs(); renderOverview(); save();
+    if(openDlgIndex===i)renderDlgCard(i);
+    toast(stageToast[to]||'Обновлено');
+  };
   qs('#dialogList').addEventListener('click',e=>{
-    const nx=e.target.closest('.js-dlg-next'), dc=e.target.closest('.js-dlg-decline');
-    if(nx){const d=dialogs[+nx.dataset.i];if(!d)return;
-      if(d.stage==='wait'){d.stage='replied';S.replies++;toast('Клиент ответил');}
-      else if(d.stage==='replied'){d.stage='active';toast('Взяли в работу');}
-      else if(d.stage==='active'){d.stage='deal';toast('Сделка! Поздравляем 🎉');}
-      renderDialogs();renderOverview();save();
-    } else if(dc){const d=dialogs[+dc.dataset.i];if(!d)return;d.stage='declined';toast('Отмечено как отказ');renderDialogs();renderOverview();save();}
+    const nx=e.target.closest('.js-dlg-next'), dc=e.target.closest('.js-dlg-decline'), row=e.target.closest('.dlg');
+    if(nx){moveStage(+nx.dataset.i, NEXT_STAGE[dialogs[+nx.dataset.i].stage]); return;}
+    if(dc){moveStage(+dc.dataset.i, 'declined'); return;}
+    if(row){openDlgCard(+row.dataset.i);}
   });
+  qs('#dlgClose').addEventListener('click',closeDlg);
+  qs('#dlgModal').addEventListener('click',e=>{if(e.target===qs('#dlgModal'))closeDlg();});
+  qs('#dlgcActions').addEventListener('click',e=>{
+    if(openDlgIndex<0)return;
+    if(e.target.closest('.js-card-next'))moveStage(openDlgIndex, NEXT_STAGE[dialogs[openDlgIndex].stage]);
+    else if(e.target.closest('.js-card-decline'))moveStage(openDlgIndex, 'declined');
+  });
+  const dlgcSend=()=>{ if(openDlgIndex<0)return; const inp=qs('#dlgcInput'); const t=inp.value.trim(); if(!t)return; const d=dialogs[openDlgIndex]; ensureThread(d); d.messages.push({from:'me',text:t}); inp.value=''; renderDlgCard(openDlgIndex); save(); };
+  qs('#dlgcSend').addEventListener('click',dlgcSend);
+  qs('#dlgcInput').addEventListener('keydown',e=>{if(e.key==='Enter')dlgcSend();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!qs('#dlgModal').hidden)closeDlg();else if(!qs('#sendModal').hidden)closeSend();}});
   qs('#dlgChips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;qsa('#dlgChips .chip').forEach(x=>x.classList.remove('is-active'));c.classList.add('is-active');dlgFilter=c.dataset.s;renderDialogs();});
 
   renderLeads(); renderDialogs(); renderOverview();
