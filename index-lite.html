@@ -533,16 +533,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 .reviews__src{ font-family:var(--mono); font-size:var(--fs-label); text-transform:uppercase; letter-spacing:.1em; color:var(--ink-50); }
 @media (prefers-reduced-motion:reduce){ .rev-card{ animation:none; } }
 @media (max-width:640px){ .reviews__cards{ grid-template-columns:1fr; } .rev-card{ transform:none; } }
-/* reviews modal list (reuses .legal-overlay / .legal-modal) */
-.legal-modal__sub{ margin:.5rem 0 1.1rem; padding-right:2.5rem; font-size:.9rem; color:var(--ink-70); }
-.legal-modal__sub a{ color:var(--accent); }
-.rev-list{ display:grid; gap:var(--s4); }
-.rev-item{ background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius-m); padding:var(--s5); }
-.rev-item__top{ display:flex; align-items:center; gap:var(--s3); margin-bottom:var(--s3); }
-.rev-item__ava{ width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:var(--accent); color:var(--on-accent); font-family:var(--serif); font-weight:700; flex-shrink:0; }
-.rev-item__name{ display:block; font-weight:600; font-size:var(--fs-sm); color:var(--ink); }
-.rev-item__stars{ display:block; color:var(--accent); font-size:.72rem; letter-spacing:.14em; }
-.rev-item__text{ color:var(--ink-70); line-height:1.6; text-wrap:pretty; }
 .site-footer{ border-top:1px solid var(--line); padding-block:var(--s8) var(--s6); }
 .footer__grid{ display:grid; grid-template-columns:1.6fr 1fr 1.2fr 1.1fr; gap:var(--s6); }
 .footer__brand p{ margin-top:var(--s4); font-size:var(--fs-sm); color:var(--ink-70); max-width:32ch; }
@@ -1073,8 +1063,8 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
       </article>
     </div>
     <div class="reviews__cta reveal">
-      <button type="button" class="btn btn--accent js-reviews">Читать все отзывы</button>
-      <span class="reviews__src">Отзывы из канала @wareonsmm</span>
+      <a class="btn btn--accent" href="https://t.me/wareonotzoviksmm" target="_blank" rel="noopener">Читать все отзывы</a>
+      <span class="reviews__src">Отзывы из канала @wareonotzoviksmm</span>
     </div>
   </section>
 
@@ -1302,62 +1292,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
 </template>
 </div>
 
-<div class="legal-overlay" id="reviewsOverlay" role="dialog" aria-modal="true" aria-labelledby="reviewsHeadTitle" hidden>
-  <div class="legal-modal">
-    <button class="legal-modal__close" id="reviewsClose" type="button" aria-label="Закрыть">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-    <div class="legal-modal__head">
-      <span class="kicker" id="reviewsHeadTitle">Отзывы клиентов</span>
-      <p class="legal-modal__sub">Живые сообщения из канала <a href="https://t.me/wareonsmm" target="_blank" rel="noopener">@wareonsmm</a></p>
-    </div>
-    <div class="legal-modal__body">
-      <div class="rev-list">
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">К</span><div><span class="rev-item__name">Клиент Wareon</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Отличная программа и инструменты для поиска клиентов, всё супер.</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">Д</span><div><span class="rev-item__name">Дизайн превью</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Привёл 2 клиента для дизайна превью. Спасибо от души.</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">О</span><div><span class="rev-item__name">Клиент Wareon</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Дал готовый оффер — после него начали отвечать в разы больше.</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">К</span><div><span class="rev-item__name">Клиент Wareon</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Отличный оффер, всё понравилось.</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">С</span><div><span class="rev-item__name">Тариф START</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Брал тариф START, думал будет 2–3 заявки для теста. В итоге получил 47 откликов за 5 дней. Из них 6 дошли до оплаты через неделю. Сейчас чистая прибыль с этих клиентов уже под 30к, а проценты отдал только со второго заказа. @artemwinzay всегда отвечал по делу, помог скорректировать оффер под мою нишу. Я уже выделил из заработанного и вложил в два тарифа — продолжаем работать 💪</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">К</span><div><span class="rev-item__name">Клиент Wareon</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Такие сообщения мне начали писать, как только команда @artemwinzay стала активно работать.</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">О</span><div><span class="rev-item__name">Продавец WB · обложки</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Долго не могла понять, почему на отклики никто не пишет. Взяла оффер за 180 ₽ и PSD-обложки. Точных цифр нет — обычно я не считаю рассылки, — но усиление откликов почувствовала сразу: раньше со 100 рассылок было около 4 откликов, а после нового изображения и оффера подскочило до 15. Оказалось, у меня был скучный и огромный оффер, который селлеры просто не читают. После обработки упаковка стала дорогой, а оффер — чётким. Набор за 320 ₽ окупился за 4 дня с одного клиента.</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">К</span><div><span class="rev-item__name">Клиент Wareon</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Хочу оставить отзыв о работе с Wareon. Сначала думал, стоит ли попробовать или лучше искать самому, но всё-таки решил — и ни капли не пожалел. Главным для меня было, не тратя времени, договориться со студией, которая реально знает, что делает. Сначала договорились на небольшой тест — и это сработало, благодаря офферам и стратегии рассылок. Уже с первого заказа я вышел в плюс и договорился о дальнейшем сотрудничестве. Всем советую — работают чётко и быстро 🔥</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">М</span><div><span class="rev-item__name">Монтаж Reels</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Я монтажёр reels-видео. Заказывал у @artemwinzay поиск клиентов под эту нишу. Договорились на 1000 рассылок — в итоге закрыл 5 клиентов, заработал 24 000 рублей, а вложил только 2 000. Сейчас прихожу в себя и осознаю, какую прекрасную команду специалистов я нашёл.</p>
-      </article>
-      <article class="rev-item">
-        <div class="rev-item__top"><span class="rev-item__ava">В</span><div><span class="rev-item__name">Веб-дизайн</span><span class="rev-item__stars" aria-label="5 из 5">★★★★★</span></div></div>
-        <p class="rev-item__text">Лучшие и опытные специалисты своего дела. Я веб-дизайнер, обратился и заказал средний тариф — и уже через пару дней ко мне стали поступать заявки от заинтересованных клиентов. Ещё и на протяжении всего процесса я видел отчётность вживую — шикарно. Начал с ними сотрудничество на месяц вперёд.</p>
-      </article>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="legal-overlay" id="legalOverlay" role="dialog" aria-modal="true" aria-labelledby="legalHeadTitle" hidden>
   <div class="legal-modal">
     <button class="legal-modal__close" id="legalClose" type="button" aria-label="Закрыть">
@@ -1421,30 +1355,6 @@ input[type="range"]::-moz-range-thumb{ width:20px; height:20px; border-radius:50
     document.getElementById('legalClose').addEventListener('click', closeLegal);
     legalOverlay.addEventListener('click', (e) => { if (e.target === legalOverlay) closeLegal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && legalOverlay.classList.contains('is-open')) closeLegal(); });
-  }
-
-  /* ---- 0a1. Reviews modal ---- */
-  const revOverlay = document.getElementById('reviewsOverlay');
-  if (revOverlay) {
-    const revBody = revOverlay.querySelector('.legal-modal__body');
-    let revLast = null;
-    const openRev = () => {
-      revLast = document.activeElement;
-      revOverlay.removeAttribute('hidden');
-      if (revBody) revBody.scrollTop = 0;
-      requestAnimationFrame(() => requestAnimationFrame(() => revOverlay.classList.add('is-open')));
-      document.body.style.overflow = 'hidden';
-    };
-    const closeRev = () => {
-      revOverlay.classList.remove('is-open');
-      document.body.style.overflow = '';
-      setTimeout(() => revOverlay.setAttribute('hidden', ''), 400);
-      if (revLast) revLast.focus();
-    };
-    document.querySelectorAll('.js-reviews').forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); openRev(); }));
-    document.getElementById('reviewsClose').addEventListener('click', closeRev);
-    revOverlay.addEventListener('click', (e) => { if (e.target === revOverlay) closeRev(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && revOverlay.classList.contains('is-open')) closeRev(); });
   }
 
   /* ---- 0b. Mobile menu ---- */
